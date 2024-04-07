@@ -1,6 +1,7 @@
 package dk.cphbusiness.vp.f2024.Eksamen.impl.prototype;
 
 import dk.cphbusiness.vp.f2024.Eksamen.intf.Dungeon;
+import dk.cphbusiness.vp.f2024.Eksamen.intf.Entity;
 import dk.cphbusiness.vp.f2024.Eksamen.intf.Location;
 import dk.cphbusiness.vp.f2024.Eksamen.intf.Portal;
 
@@ -36,7 +37,7 @@ public class ProtoDungeon implements Dungeon {
                         .append(System.lineSeparator());
             }
 
-            /*
+
             res.append("    Entities:").append(System.lineSeparator());
 
             for(Entity entity : location.getEntities())
@@ -46,7 +47,7 @@ public class ProtoDungeon implements Dungeon {
                         .append(System.lineSeparator());
             }
 
-             */
+
 
         }
         return res.toString();

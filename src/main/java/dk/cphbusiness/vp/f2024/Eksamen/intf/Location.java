@@ -7,4 +7,8 @@ public interface Location {
     String getDescription();
     List<Portal> getPortals();
     void addPortal(Portal portal);
+
+    void addEntity(Entity entity);
+    List<Entity> getEntities();
+    void removeEntity(Entity entity);
 }
