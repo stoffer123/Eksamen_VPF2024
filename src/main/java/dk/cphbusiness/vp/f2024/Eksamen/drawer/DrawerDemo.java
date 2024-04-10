@@ -4,7 +4,7 @@ public class DrawerDemo {
     public static void main(String[] args) {
         Drawer drawer = new DrawerImpl();
 
-        char[][] box = drawer.drawBox(5,5);
+        char[][] box = drawer.drawBox(10,5);
 
         for(int i = 0; i < box.length; i++) {
             for(int j = 0; j < box[i].length; j++) {

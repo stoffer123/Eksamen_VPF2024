@@ -12,31 +12,29 @@ public class DrawerImpl implements Drawer {
     public char[][] drawBox(int width, int height) {
         char[][] box = new char[height][width];
 
+
         for(int y = 0; y < height; y++) {
             for(int x = 0; x < width; x++) {
                 box[y][x] = ' ';
-                if(y == 0 && x == 0) {
-                    box[y][x] = ulCorner;
-                }
-                else if(y == 0) {
+
+                //Horizontal lines
+                if((x != 0 && x != width - 1 ) && (y == 0 || y == height - 1)) {
                     box[y][x] = hLine;
                 }
-                if(y == 0 && x == width - 1) {
-                    box[y][x] = urCorner;
-                }
-                else if((x == 0 || x == width - 1) && y != 0 && y != height - 1 ) {
+
+                //Vertical lines
+                if((x == 0 || x == width - 1) && (y != 0 && y != height - 1)) {
                     box[y][x] = vLine;
                 }
-                if((y == height - 1 && x == 0)) {
-                    box[y][x] = llCorner;
-                } else if(y == height - 1 && x == width - 1) {
-                    box[y][x] = lrCorner;
-                }
-                else if (y == height - 1 && (x != 0 && x != width - 1)) {
-                    box[y][x] = hLine;
-                }
+
+
             }
         }
+        //Corners
+        box[0][0] = ulCorner;
+        box[0][width - 1] = urCorner;
+        box[height -1][0] = llCorner;
+        box[height - 1][width - 1] = lrCorner;
 
 
         return box.clone();

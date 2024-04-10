@@ -17,5 +17,6 @@ public class ProtoDungeonDirector implements DungeonDirector {
         builder.createPortal("P3", l3, l4);
         builder.createPortal("P4", l4, l1);
         return builder.build();
+        
     }
 }
