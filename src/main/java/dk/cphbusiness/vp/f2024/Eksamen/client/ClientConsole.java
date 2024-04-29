@@ -1,5 +1,8 @@
 package dk.cphbusiness.vp.f2024.Eksamen.client;
 
+import dk.cphbusiness.vp.f2024.Eksamen.textio.Textio;
+import dk.cphbusiness.vp.f2024.Eksamen.textio.TextioImpl;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -8,10 +11,13 @@ import java.net.Socket;
 public class ClientConsole implements Client {
     private final String ip;
     private final int port;
-
-    public ClientConsole(String ip, int port) {
+    private Textio io;
+    private String name;
+    public ClientConsole(String ip, int port, String name) {
         this.ip = ip;
         this.port = port;
+        this.io = new TextioImpl();
+        this.name = name;
     }
     @Override
     public void run() {
@@ -19,11 +25,14 @@ public class ClientConsole implements Client {
             DataInputStream inputStream = new DataInputStream(socket.getInputStream());
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream()))
         {
-            outputStream.writeUTF("Connected to " + ip + ":" + port);
+            while(true) {
+                String message = io.get();
+                outputStream.writeUTF(name + " Sent: " + message);
+            }
 
 
         } catch (IOException e) {
-
+            System.out.println(e);
         }
 
     }
