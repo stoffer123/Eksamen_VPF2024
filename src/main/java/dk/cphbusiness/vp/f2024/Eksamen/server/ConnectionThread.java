@@ -10,22 +10,31 @@ import java.net.Socket;
 public class ConnectionThread implements Runnable {
     private final Socket socket;
     private final Textio io;
+    private DataInputStream inputStream;
+    private DataOutputStream outputStream;
 
-    public ConnectionThread(Socket socket, Textio io) {
+    public ConnectionThread(Socket socket, Textio io) throws IOException {
         this.socket = socket;
         this.io = io;
-
+        inputStream = new DataInputStream(socket.getInputStream());
+        outputStream = new DataOutputStream(socket.getOutputStream());
 
     }
     @Override
     public void run() {
-        try (
-            DataInputStream inputStream = new DataInputStream(socket.getInputStream());
-            DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream())
-        ) {
+        try {
             while (true) {
+                String clientInput = inputStream.readUTF();
+                System.out.println(clientInput);
+                switch (clientInput.toLowerCase()) {
+                    case "/exit":
+                        outputStream.writeUTF("Client requested EXIT, closing socket now");
+                        socket.close();
+                        break;
+                    default:
+                        continue;
 
-                System.out.println(inputStream.readUTF());
+                }
 
             }
 

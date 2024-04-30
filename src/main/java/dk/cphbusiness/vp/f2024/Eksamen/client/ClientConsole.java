@@ -28,6 +28,10 @@ public class ClientConsole implements Client {
             while(true) {
                 String message = io.get();
                 outputStream.writeUTF(name + " Sent: " + message);
+                String serverInput = inputStream.readUTF();
+                if(serverInput != null) {
+                    System.out.println(serverInput);
+                }
             }
 
 
