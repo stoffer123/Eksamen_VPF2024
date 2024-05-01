@@ -2,7 +2,7 @@ package dk.cphbusiness.vp.f2024.Eksamen.textio;
 
 import java.util.List;
 
-public interface Textio {
+public interface TextIO {
     void put(String message);
     String get();
     int getInt();

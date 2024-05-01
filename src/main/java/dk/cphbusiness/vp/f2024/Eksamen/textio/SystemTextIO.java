@@ -3,10 +3,10 @@ package dk.cphbusiness.vp.f2024.Eksamen.textio;
 import java.util.List;
 import java.util.Scanner;
 
-public class TextioImpl implements Textio {
+public class SystemTextIO implements TextIO {
     Scanner scanner;
 
-    public TextioImpl() {
+    public SystemTextIO() {
         scanner = new Scanner(System.in);
     }
 
