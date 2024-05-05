@@ -2,17 +2,13 @@ package dk.cphbusiness.vp.f2024.Eksamen.server;
 
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.Broadcaster;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
-import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.Message;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -26,7 +22,7 @@ public class ChatServerImpl implements ChatServer {
     public ChatServerImpl(int port) {
         this.port = port;
         users = new ArrayList<>();
-        messages = new ArrayBlockingQueue<>(100);
+        messages = new LinkedBlockingQueue<>(100);
     }
 
     @Override
@@ -36,11 +32,12 @@ public class ChatServerImpl implements ChatServer {
 
             System.out.println("Server started with port: " + port);
             Broadcaster broadcaster = new BroadcasterImpl(messages, users);
-            new Thread(broadcaster);
+            new Thread(broadcaster).start();
+
             while(true) {
                 Socket socket = serverSocket.accept();
-                User user = new UserImpl(socket);
-                user.run();
+                User user = new UserImpl(this, socket);
+                //user.run();
                 users.add(user);
                 new Thread(user).start();
 
@@ -73,11 +70,8 @@ public class ChatServerImpl implements ChatServer {
 
     @Override
     public void addMessageToQueue(Message message) {
-
+        messages.add(message);
     }
 
-    @Override
-    public void broadCast() {
 
-    }
 }

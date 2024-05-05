@@ -6,6 +6,7 @@ public interface User extends Runnable {
      void run();
      void close();
      String getName();
-     void receiveMessage(String message);
+     void setName(String name);
+     void sendMessage(String message);
 
 }

@@ -1,10 +1,8 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server;
 
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.Broadcaster;
-import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.Message;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
@@ -20,26 +18,26 @@ public class BroadcasterImpl implements Broadcaster {
 
     @Override
     public void run() {
-            while (true) {
-                if(messages.size() < 1) {
+        try {
+            while (messages != null) {
+                if (messages.size() < 1) {
                     continue;
                 }
+                Message message = messages.take();
 
-                for(Message m : messages) {
-                    for(User u : users) {
-                        if(u != m.getUser()) {
-                            continue;
-                        }
-                        u.receiveMessage(m.getText());
+                for (User user : users) {
+                    if (user == message.getUser()) {
+                        continue;
                     }
+                    String msgToSend = "[" + message.getUser().getName() + "] " + message.getMessage();
+                    user.sendMessage(msgToSend);
                 }
             }
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+        }
 
     }
 
-    @Override
-    public void broadcast() {
-
-    }
 
 }
