@@ -19,7 +19,7 @@ public class UserImpl implements User {
     public UserImpl(ChatServer server, Socket socket) {
         this.server = server;
         this.socket = socket;
-        this.name = "New User";
+        this.name = "FUNGUS";
         try {
             input = new DataInputStream(socket.getInputStream());
             output = new DataOutputStream(socket.getOutputStream());
@@ -31,16 +31,30 @@ public class UserImpl implements User {
     @Override
     public void run() {
         try {
+            init();
             while (socket != null) {
                 String message = input.readUTF();
                 server.addMessageToQueue(new Message(this, message));
-                System.out.println("added message to queue: " + message);
+                System.out.println("[" + name + "] " + message);
 
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
 
+    }
+
+    @Override
+    public void init() {
+        try {
+            sendMessage("Connected to " + socket.getRemoteSocketAddress());
+            sendMessage("Please enter your name: ");
+            String temp = input.readUTF();
+            setName(temp);
+            sendMessage("Welcome " + name + "!");
+        }catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
@@ -69,7 +83,6 @@ public class UserImpl implements User {
     public void sendMessage(String message) {
         try {
             output.writeUTF(message);
-            System.out.println("sent message: " + message);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }

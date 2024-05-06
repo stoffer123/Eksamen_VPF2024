@@ -8,5 +8,6 @@ public interface User extends Runnable {
      String getName();
      void setName(String name);
      void sendMessage(String message);
+     void init();
 
 }
