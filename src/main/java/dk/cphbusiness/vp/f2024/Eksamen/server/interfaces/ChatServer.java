@@ -6,6 +6,7 @@ public interface ChatServer {
     void startServer();
     void stopServer();
     void addMessageToQueue(Message message);
+    void removeUser(User user);
 
 
 

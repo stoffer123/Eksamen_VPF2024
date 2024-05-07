@@ -39,7 +39,8 @@ public class UserImpl implements User {
 
             }
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            close();
+            System.out.println("[SERVER] " + name + " Disconnected!");
         }
 
     }
@@ -63,6 +64,7 @@ public class UserImpl implements User {
             input.close();
             output.close();
             socket.close();
+            server.removeUser(this);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }

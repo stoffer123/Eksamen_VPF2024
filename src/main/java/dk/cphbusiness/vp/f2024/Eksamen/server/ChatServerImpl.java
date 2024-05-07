@@ -73,5 +73,8 @@ public class ChatServerImpl implements ChatServer {
         messages.add(message);
     }
 
-
+    @Override
+    public void removeUser(User user) {
+        users.remove(user);
+    }
 }
