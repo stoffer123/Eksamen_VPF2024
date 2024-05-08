@@ -33,7 +33,6 @@ public class UserImpl implements User {
             while (socket != null) {
                 String message = input.readUTF();
                 server.addMessageToQueue(new Message(this, message));
-                //System.out.println("[" + name + "] " + message);
 
             }
         } catch (IOException e) {
@@ -48,9 +47,15 @@ public class UserImpl implements User {
         try {
             sendMessage("Connected to " + socket.getRemoteSocketAddress());
             sendMessage("Please enter your name: ");
-            String temp = input.readUTF();
-            setName(temp);
-            sendMessage("Welcome " + name + "!");
+            while(true) {
+                String temp = input.readUTF();
+                if (!temp.equals("") && !temp.toLowerCase().equals("server")) {
+                    setName(temp);
+                    sendMessage("Welcome " + name + "!");
+                    return;
+                }
+                sendMessage("Not a valid name, try again!");
+            }
         }catch (IOException e) {
             System.out.println(e.getMessage());
         }

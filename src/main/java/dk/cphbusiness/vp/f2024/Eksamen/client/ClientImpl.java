@@ -27,7 +27,7 @@ public class ClientImpl implements Client {
     @Override
     public void run() {
         new Thread(new TxtListener(this, socket, input, io)).start();
-        while(socket != null) {
+        while(socket.isConnected()) {
             String message = io.get();
             sendMessage(message);
         }
@@ -35,6 +35,9 @@ public class ClientImpl implements Client {
 
     @Override
     public void stop() {
+
+        System.out.println("Connection lost");
+        System.exit(0);
 
     }
 
