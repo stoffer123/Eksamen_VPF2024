@@ -12,20 +12,18 @@ public class UserImpl implements User {
     private final ChatServer server;
     private final Socket socket;
     private String name;
-    private DataInputStream input;
-    private DataOutputStream output;
+    private final DataInputStream input;
+    private final DataOutputStream output;
 
 
-    public UserImpl(ChatServer server, Socket socket) {
+    public UserImpl(ChatServer server, Socket socket) throws IOException {
+
         this.server = server;
         this.socket = socket;
         this.name = "FUNGUS";
-        try {
-            input = new DataInputStream(socket.getInputStream());
-            output = new DataOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        input = new DataInputStream(socket.getInputStream());
+        output = new DataOutputStream(socket.getOutputStream());
+
     }
 
     @Override
@@ -35,7 +33,7 @@ public class UserImpl implements User {
             while (socket != null) {
                 String message = input.readUTF();
                 server.addMessageToQueue(new Message(this, message));
-                System.out.println("[" + name + "] " + message);
+                //System.out.println("[" + name + "] " + message);
 
             }
         } catch (IOException e) {
@@ -59,7 +57,7 @@ public class UserImpl implements User {
     }
 
     @Override
-    public void close() {
+    public void close(){
         try {
             input.close();
             output.close();
@@ -82,11 +80,7 @@ public class UserImpl implements User {
     }
 
     @Override
-    public void sendMessage(String message) {
-        try {
+    public void sendMessage(String message) throws IOException {
             output.writeUTF(message);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
     }
 }

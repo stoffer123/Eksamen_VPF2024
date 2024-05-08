@@ -28,16 +28,20 @@ public class ChatServerImpl implements ChatServer {
     @Override
     public void startServer() {
         try {
+            //Create serverSocket, Broadcaster and serverUser
             serverSocket = new ServerSocket(port);
-
-            System.out.println("Server started with port: " + port);
             Broadcaster broadcaster = new BroadcasterImpl(messages, users);
             new Thread(broadcaster).start();
+            User server = new ServerUserImpl(this);
+            new Thread(server).start();
+            users.add(server);
+            System.out.println("Server started with port: " + port);
 
+
+            //Start listening for clients
             while(true) {
                 Socket socket = serverSocket.accept();
                 User user = new UserImpl(this, socket);
-                //user.run();
                 users.add(user);
                 new Thread(user).start();
 
