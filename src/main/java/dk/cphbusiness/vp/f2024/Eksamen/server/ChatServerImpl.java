@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -80,5 +81,10 @@ public class ChatServerImpl implements ChatServer {
     @Override
     public void removeUser(User user) {
         users.remove(user);
+    }
+
+    @Override
+    public List<User> getUsers() {
+        return Collections.unmodifiableList(users);
     }
 }

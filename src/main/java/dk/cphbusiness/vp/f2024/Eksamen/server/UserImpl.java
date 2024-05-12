@@ -7,6 +7,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
 
 public class UserImpl implements User {
     private final ChatServer server;
@@ -49,12 +50,25 @@ public class UserImpl implements User {
             sendMessage("Please enter your name: ");
             while(true) {
                 String temp = input.readUTF();
-                if (!temp.equals("") && !temp.toLowerCase().equals("server")) {
+                final List<User> users = server.getUsers();
+                boolean nameExists = false;
+
+                for(User user : users) {
+                    if(user.getName().toLowerCase().equals(temp.toLowerCase())) {
+                        nameExists = true;
+                    }
+                }
+
+                if(nameExists) {
+                        sendMessage("Not a valid name, try again!");
+                        continue;
+                }else {
                     setName(temp);
                     sendMessage("Welcome " + name + "!");
-                    return;
+                    break;
+
                 }
-                sendMessage("Not a valid name, try again!");
+
             }
         }catch (IOException e) {
             System.out.println(e.getMessage());
