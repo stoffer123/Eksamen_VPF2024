@@ -48,6 +48,8 @@ public class UserImpl implements User {
         try {
             sendMessage("Connected to " + socket.getRemoteSocketAddress());
             sendMessage("Please enter your name: ");
+
+            //Check if name is already in use
             while(true) {
                 String temp = input.readUTF();
                 final List<User> users = server.getUsers();
