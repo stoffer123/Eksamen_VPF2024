@@ -1,20 +1,22 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
-import dk.cphbusiness.vp.f2024.Eksamen.server.Message;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.Broadcaster;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
+import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public class BroadcasterImpl implements Broadcaster {
-    BlockingQueue<Message> messages;
-    List<User> users;
+    private BlockingQueue<MessageImpl> messages;
+    private List<User> users;
+    private final TextIO io;
 
-    public BroadcasterImpl(BlockingQueue<Message> messages, List<User> users) {
+    public BroadcasterImpl(BlockingQueue<MessageImpl> messages, List<User> users, TextIO io) {
             this.messages = messages;
             this.users = users;
+            this.io = io;
 
     }
 
@@ -25,20 +27,20 @@ public class BroadcasterImpl implements Broadcaster {
                 if (messages.isEmpty()) {
                     continue;
                 }
-                Message message = messages.take();
+                MessageImpl message = messages.take();
 
                 for (User user : users) {
                     if (user == message.getUser()) {
                         continue;
                     }
-                    String msgToSend = "[" + message.getUser().getName() + "] " + message.getMessage();
+                    String msgToSend = "[" + message.getUser().getName() + "] " + message.getText();
                     user.sendMessage(msgToSend);
                 }
             }
         } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
+            io.put(e.getMessage());
         }catch (IOException e){
-            System.out.println("Connection error" + e.getMessage());
+            io.put("Connection error" + e.getMessage());
         }
     }
 

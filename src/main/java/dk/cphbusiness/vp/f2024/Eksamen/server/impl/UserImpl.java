@@ -1,8 +1,8 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
-import dk.cphbusiness.vp.f2024.Eksamen.server.Message;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
+import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -16,12 +16,14 @@ public class UserImpl implements User {
     private String name;
     private final DataInputStream input;
     private final DataOutputStream output;
+    private final TextIO io;
 
 
-    public UserImpl(ChatServer server, Socket socket) throws IOException {
+    public UserImpl(ChatServer server, Socket socket, TextIO io) throws IOException {
 
         this.server = server;
         this.socket = socket;
+        this.io = io;
         this.name = "FUNGUS";
         input = new DataInputStream(socket.getInputStream());
         output = new DataOutputStream(socket.getOutputStream());
@@ -34,26 +36,25 @@ public class UserImpl implements User {
             init();
             while (socket != null) {
                 String message = input.readUTF();
-                server.addMessageToQueue(new Message(this, message));
+                server.addMessageToQueue(new MessageImpl(this, message));
 
             }
         } catch (IOException e) {
             close();
-            System.out.println("[SERVER] " + name + " Disconnected!");
+            io.put("[SERVER] " + name + " Disconnected!");
         }
 
     }
 
     @Override
-    public void init() {
-        try {
+    public void init() throws IOException {
             sendMessage("Connected to " + socket.getRemoteSocketAddress());
             sendMessage("Please enter your name: ");
 
             //Check if name is already in use
             while(true) {
                 String temp = input.readUTF();
-                final List<User> users = server.getUsers();
+                List<User> users = server.getUsers();
                 boolean nameExists = false;
 
                 for(User user : users) {
@@ -64,7 +65,7 @@ public class UserImpl implements User {
 
                 if(nameExists) {
                         sendMessage("Not a valid name, try again!");
-                        continue;
+
                 }else {
                     setName(temp);
                     sendMessage("Welcome " + name + "!");
@@ -73,9 +74,7 @@ public class UserImpl implements User {
                 }
 
             }
-        }catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+
     }
 
     @Override
@@ -86,7 +85,7 @@ public class UserImpl implements User {
             socket.close();
             server.removeUser(this);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            io.put(e.getMessage());
         }
 
     }

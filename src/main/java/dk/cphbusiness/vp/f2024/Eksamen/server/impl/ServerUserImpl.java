@@ -1,6 +1,5 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
-import dk.cphbusiness.vp.f2024.Eksamen.server.Message;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.SystemTextIO;
@@ -11,13 +10,13 @@ import java.io.*;
 public class ServerUserImpl implements User {
     private final ChatServer server;
     private String name;
-    TextIO io;
+    private TextIO io;
 
 
-    public ServerUserImpl(ChatServer server) {
+    public ServerUserImpl(ChatServer server, TextIO io) {
         this.server = server;
         this.name = "SERVER";
-        this.io = new SystemTextIO();
+        this.io = io;
 
     }
 
@@ -25,7 +24,7 @@ public class ServerUserImpl implements User {
     public void run() {
         while (true) {
             String message = io.get();
-            server.addMessageToQueue(new Message(this, message));
+            server.addMessageToQueue(new MessageImpl(this, message));
         }
     }
 
@@ -41,12 +40,12 @@ public class ServerUserImpl implements User {
 
     @Override
     public void setName(String name) {
-        System.out.println("SERVER cannot change name!");
+        io.put("SERVER cannot change name!");
     }
 
     @Override
     public void sendMessage(String message) throws IOException {
-        System.out.println(message);
+        io.put(message);
     }
 
     @Override

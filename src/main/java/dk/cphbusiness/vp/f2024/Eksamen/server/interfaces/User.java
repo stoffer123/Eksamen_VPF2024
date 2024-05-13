@@ -9,6 +9,6 @@ public interface User extends Runnable {
      String getName();
      void setName(String name);
      void sendMessage(String message) throws IOException;
-     void init();
+     void init() throws IOException;
 
 }
