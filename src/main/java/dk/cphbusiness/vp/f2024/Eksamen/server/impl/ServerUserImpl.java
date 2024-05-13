@@ -1,12 +1,12 @@
-package dk.cphbusiness.vp.f2024.Eksamen.server;
+package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
+import dk.cphbusiness.vp.f2024.Eksamen.server.Message;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.SystemTextIO;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
 import java.io.*;
-import java.net.Socket;
 
 public class ServerUserImpl implements User {
     private final ChatServer server;

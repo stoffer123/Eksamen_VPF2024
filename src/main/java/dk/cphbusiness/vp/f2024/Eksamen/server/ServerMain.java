@@ -1,5 +1,7 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server;
 
+import dk.cphbusiness.vp.f2024.Eksamen.server.impl.ChatServerImpl;
+
 public class ServerMain {
     public static void main(String[] args) {
         if(args.length != 1) {

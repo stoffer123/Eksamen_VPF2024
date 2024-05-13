@@ -1,5 +1,6 @@
-package dk.cphbusiness.vp.f2024.Eksamen.server;
+package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
+import dk.cphbusiness.vp.f2024.Eksamen.server.Message;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.Broadcaster;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
