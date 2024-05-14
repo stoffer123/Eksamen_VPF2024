@@ -69,6 +69,7 @@ public class UserImpl implements User {
                 }else {
                     setName(temp);
                     sendMessage("Welcome " + name + "!");
+
                     break;
 
                 }

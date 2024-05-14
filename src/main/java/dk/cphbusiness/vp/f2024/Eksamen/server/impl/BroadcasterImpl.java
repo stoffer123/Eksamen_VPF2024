@@ -38,8 +38,11 @@ public class BroadcasterImpl implements Broadcaster {
                 }
             }
         } catch (InterruptedException e) {
+            io.put("Broadcaster was interrupted while taking message from queue");
             io.put(e.getMessage());
         }catch (IOException e){
+
+            //Make more specific, fx which user caused the connection error?, maybe do try/catch inside for loop
             io.put("Connection error" + e.getMessage());
         }
     }

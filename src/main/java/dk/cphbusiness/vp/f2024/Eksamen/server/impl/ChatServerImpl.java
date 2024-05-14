@@ -36,9 +36,9 @@ public class ChatServerImpl implements ChatServer {
             serverSocket = new ServerSocket(port);
             Broadcaster broadcaster = new BroadcasterImpl(messages, users, io);
             new Thread(broadcaster).start();
-            User server = new ServerUserImpl(this, io);
-            new Thread(server).start();
-            users.add(server);
+            User serverUser = new ServerUserImpl(this, io);
+            new Thread(serverUser).start();
+            users.add(serverUser);
             io.put("Server started with port: " + port);
 
 
@@ -48,6 +48,7 @@ public class ChatServerImpl implements ChatServer {
                 User user = new UserImpl(this, socket, io);
                 users.add(user);
                 new Thread(user).start();
+                serverUser.sendMessage("A new user has joined, waiting for name....");
 
             }
         }catch(IOException e) {

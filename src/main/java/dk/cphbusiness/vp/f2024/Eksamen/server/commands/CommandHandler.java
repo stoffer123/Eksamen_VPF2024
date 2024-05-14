@@ -10,6 +10,7 @@ public class CommandHandler {
         this.server = server;
     }
 
+    //WIP
     public String handle(String text, User user) {
         if(text.charAt(0) != '/') {
             return text;
@@ -17,6 +18,6 @@ public class CommandHandler {
 
 
 
-
+        return "WIP";
     }
 }
