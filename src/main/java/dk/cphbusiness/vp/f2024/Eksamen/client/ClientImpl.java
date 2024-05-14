@@ -35,7 +35,7 @@ public class ClientImpl implements Client {
 
     @Override
     public void stop() {
-
+        //close socket and streams
         io.put("Shutting down");
         System.exit(0);
 

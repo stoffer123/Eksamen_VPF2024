@@ -3,6 +3,8 @@ package dk.cphbusiness.vp.f2024.Eksamen.server.commands;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 
+import java.security.spec.EdDSAParameterSpec;
+
 public class CommandHandler {
     private ChatServer server;
 
@@ -16,8 +18,11 @@ public class CommandHandler {
             return text;
         }
 
+    }
 
 
         return "WIP";
     }
+
+
 }

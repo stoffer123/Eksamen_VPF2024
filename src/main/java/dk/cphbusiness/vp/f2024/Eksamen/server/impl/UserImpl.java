@@ -58,6 +58,7 @@ public class UserImpl implements User {
                 boolean nameExists = false;
 
                 for(User user : users) {
+                    //Trim if condition.
                     if(user.getName().toLowerCase().equals(temp.toLowerCase())) {
                         nameExists = true;
                     }

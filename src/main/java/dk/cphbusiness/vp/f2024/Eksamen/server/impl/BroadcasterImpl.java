@@ -29,10 +29,12 @@ public class BroadcasterImpl implements Broadcaster {
                 }
                 MessageImpl message = messages.take();
 
+                //evt whileLoop
                 for (User user : users) {
                     if (user == message.getUser()) {
                         continue;
                     }
+
                     String msgToSend = "[" + message.getUser().getName() + "] " + message.getText();
                     user.sendMessage(msgToSend);
                 }
@@ -43,6 +45,7 @@ public class BroadcasterImpl implements Broadcaster {
         }catch (IOException e){
 
             //Make more specific, fx which user caused the connection error?, maybe do try/catch inside for loop
+            //deklarer variabel øverst
             io.put("Connection error" + e.getMessage());
         }
     }

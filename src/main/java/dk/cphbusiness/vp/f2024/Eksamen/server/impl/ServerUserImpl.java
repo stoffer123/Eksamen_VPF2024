@@ -47,9 +47,13 @@ public class ServerUserImpl implements User {
     public void sendMessage(String message) throws IOException {
         io.put(message);
     }
+    //Overload sendMessage til at sende direkte til en bruger
+
 
     @Override
     public void init() {
 
     }
+
+
 }

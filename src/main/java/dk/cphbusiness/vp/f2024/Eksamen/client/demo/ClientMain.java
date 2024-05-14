@@ -11,6 +11,7 @@ public class ClientMain {
     public static void main(String[] args) {
         TextIO io = new SystemTextIO();
         try {
+            //Find port register på stackoverflow
             Client client = new ClientImpl("127.0.0.1", 23456, io);
             client.run();
         }catch (IOException e) {
