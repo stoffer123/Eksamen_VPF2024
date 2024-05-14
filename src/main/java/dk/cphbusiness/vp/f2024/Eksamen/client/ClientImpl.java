@@ -36,7 +36,7 @@ public class ClientImpl implements Client {
     @Override
     public void stop() {
 
-        System.out.println("Connection lost");
+        io.put("Shutting down");
         System.exit(0);
 
     }
@@ -47,7 +47,7 @@ public class ClientImpl implements Client {
         output.writeUTF(message);
 
         }catch(IOException e) {
-            System.out.println(e.getMessage());
+            io.put(e.getMessage());
         }
     }
 
@@ -55,4 +55,6 @@ public class ClientImpl implements Client {
     public void receiveMessage(String message) {
         io.put(message);
     }
+
+
 }
