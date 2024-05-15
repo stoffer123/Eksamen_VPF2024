@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface TextIO {
     void put(String message);
+
+    void putError(String message);
     String get();
     int getInt();
     int choose(String question, String[] options, String choose);

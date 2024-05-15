@@ -17,6 +17,11 @@ public class SystemTextIO implements TextIO {
     }
 
     @Override
+    public void putError(String message) {
+        System.out.println("[ERROR] " + message);
+    }
+
+    @Override
     public String get() {
         String input = scanner.nextLine();
         return input;

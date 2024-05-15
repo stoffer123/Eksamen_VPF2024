@@ -45,10 +45,10 @@ public class ChatServerImpl implements ChatServer {
             //Start listening for clients
             while(true) {
                 Socket socket = serverSocket.accept();
-                User user = new UserImpl(this, socket, io);
+                User user = new UserImpl(this, serverUser, socket, io);
                 users.add(user);
                 new Thread(user).start();
-                serverUser.sendMessage("A new user has joined, waiting for name....");
+                addMessageToQueue(new MessageImpl(serverUser, "A new user has joined, waiting for name..."));
 
             }
         }catch(IOException e) {

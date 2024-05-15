@@ -12,36 +12,41 @@ import java.util.List;
 
 public class UserImpl implements User {
     private final ChatServer server;
+    private final User serverUser;
     private final Socket socket;
     private String name;
     private final DataInputStream input;
     private final DataOutputStream output;
     private final TextIO io;
+    private boolean isRunning;
 
 
-    public UserImpl(ChatServer server, Socket socket, TextIO io) throws IOException {
+    public UserImpl(ChatServer server, User serverUser, Socket socket, TextIO io) throws IOException {
 
         this.server = server;
+        this.serverUser = serverUser;
         this.socket = socket;
         this.io = io;
-        this.name = "FUNGUS";
+        this.name = "NewUser";
         input = new DataInputStream(socket.getInputStream());
         output = new DataOutputStream(socket.getOutputStream());
-
+        isRunning = true;
     }
 
     @Override
     public void run() {
         try {
             init();
-            while (socket != null) {
-                String message = input.readUTF();
-                server.addMessageToQueue(new MessageImpl(this, message));
+            while (isRunning) {
+                String text = input.readUTF();
+                server.addMessageToQueue(new MessageImpl(this, text));
 
             }
+            close();
+
         } catch (IOException e) {
             close();
-            io.put("[SERVER] " + name + " Disconnected!");
+            io.putError(e.getMessage() + " For user: " + name);
         }
 
     }
@@ -53,13 +58,12 @@ public class UserImpl implements User {
 
             //Check if name is already in use
             while(true) {
-                String temp = input.readUTF();
+                String temp = input.readUTF().trim();
                 List<User> users = server.getUsers();
                 boolean nameExists = false;
 
                 for(User user : users) {
-                    //Trim if condition.
-                    if(user.getName().toLowerCase().equals(temp.toLowerCase())) {
+                    if(user.getName().equalsIgnoreCase(temp)) {
                         nameExists = true;
                     }
                 }
@@ -69,7 +73,7 @@ public class UserImpl implements User {
 
                 }else {
                     setName(temp);
-                    sendMessage("Welcome " + name + "!");
+                    server.addMessageToQueue(new MessageImpl(serverUser, "Welcome " + name + "!"));
 
                     break;
 
@@ -103,7 +107,7 @@ public class UserImpl implements User {
     }
 
     @Override
-    public void sendMessage(String message) throws IOException {
-            output.writeUTF(message);
+    public void sendMessage(String text) throws IOException {
+            output.writeUTF(text);
     }
 }
