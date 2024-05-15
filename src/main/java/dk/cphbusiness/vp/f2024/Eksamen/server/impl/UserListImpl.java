@@ -8,7 +8,6 @@ import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class UserListImpl implements UserList {

@@ -14,7 +14,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class ChatServerImpl implements ChatServer {
     private int port;
-    //private List<User> users;
     private final TextIO io;
     private ServerSocket serverSocket;
     private UserList users;
@@ -25,7 +24,6 @@ public class ChatServerImpl implements ChatServer {
     public ChatServerImpl(int port, TextIO io) {
         this.port = port;
         this.io = io;
-        //users = new ArrayList<>();
         users = new UserListImpl(this, io);
         messages = new LinkedBlockingQueue<>(100);
         isOnline = true;
@@ -43,8 +41,6 @@ public class ChatServerImpl implements ChatServer {
             users.addUser(serverUser);
             io.put("Server started with port: " + port);
 
-            //Breaks on 2 simultaneous connections
-            //solution might be to store socket in a blockingqueue and have a thread for creating clients?
             while(isOnline) {
                 Socket socket = serverSocket.accept();
                 addMessageToQueue(new MessageImpl(serverUser, "A new user has joined, waiting for name..."));
