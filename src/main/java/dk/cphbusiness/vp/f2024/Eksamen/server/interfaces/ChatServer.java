@@ -9,7 +9,6 @@ public interface ChatServer {
     void stopServer();
     void addMessageToQueue(Message message);
     void removeUser(User user);
-    List<User> getUsers();
     boolean isOnline();
 
 

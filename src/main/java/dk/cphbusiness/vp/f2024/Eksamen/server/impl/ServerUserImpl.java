@@ -30,7 +30,7 @@ public class ServerUserImpl implements User {
 
     @Override
     public void close() {
-
+        //not needed in serverUserImpl
     }
 
     @Override

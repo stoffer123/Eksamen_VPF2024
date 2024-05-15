@@ -1,9 +1,6 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
-import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.Broadcaster;
-import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
-import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.Message;
-import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
+import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.*;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
 import java.io.IOException;
@@ -17,9 +14,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class ChatServerImpl implements ChatServer {
     private int port;
-    private List<User> users;
+    //private List<User> users;
     private final TextIO io;
     private ServerSocket serverSocket;
+    private UserList users;
     private BlockingQueue<Message> messages;
     private boolean isOnline;
 
@@ -27,7 +25,8 @@ public class ChatServerImpl implements ChatServer {
     public ChatServerImpl(int port, TextIO io) {
         this.port = port;
         this.io = io;
-        users = new ArrayList<>();
+        //users = new ArrayList<>();
+        users = new UserListImpl(this, io);
         messages = new LinkedBlockingQueue<>(100);
         isOnline = true;
     }
@@ -37,11 +36,11 @@ public class ChatServerImpl implements ChatServer {
         try {
             //Create serverSocket, Broadcaster and serverUser
             serverSocket = new ServerSocket(port);
-            Broadcaster broadcaster = new BroadcasterImpl(messages, this, io);
+            Broadcaster broadcaster = new BroadcasterImpl(messages, this, io, users);
             new Thread(broadcaster).start();
             User serverUser = new ServerUserImpl(this, io);
             new Thread(serverUser).start();
-            users.add(serverUser);
+            users.addUser(serverUser);
             io.put("Server started with port: " + port);
 
             //Breaks on 2 simultaneous connections
@@ -49,8 +48,8 @@ public class ChatServerImpl implements ChatServer {
             while(isOnline) {
                 Socket socket = serverSocket.accept();
                 addMessageToQueue(new MessageImpl(serverUser, "A new user has joined, waiting for name..."));
-                User user = new UserImpl(this, serverUser, socket, io);
-                users.add(user);
+                User user = new UserImpl(this, serverUser, socket, io, users);
+                users.addUser(user);
                 new Thread(user).start();
 
             }
@@ -63,10 +62,7 @@ public class ChatServerImpl implements ChatServer {
     public void stopServer() {
         io.put("Stopping server");
         isOnline = false;
-        for(User user : users) {
-            user.close();
-            io.put(user.getName() + " Disconnected by the server");
-        }
+
         users.clear();
         try {
         serverSocket.close();
@@ -87,13 +83,9 @@ public class ChatServerImpl implements ChatServer {
 
     @Override
     public void removeUser(User user) {
-        users.remove(user);
+        users.removeUser(user);
     }
 
-    @Override
-    public List<User> getUsers() {
-        return Collections.unmodifiableList(users);
-    }
 
     @Override
     public boolean isOnline() {

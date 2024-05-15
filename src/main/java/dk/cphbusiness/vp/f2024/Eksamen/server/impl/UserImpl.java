@@ -2,6 +2,7 @@ package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
+import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.UserList;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
 import java.io.DataInputStream;
@@ -19,9 +20,10 @@ public class UserImpl implements User {
     private final DataOutputStream output;
     private final TextIO io;
     private boolean isRunning;
+    private UserList users;
 
 
-    public UserImpl(ChatServer server, User serverUser, Socket socket, TextIO io) throws IOException {
+    public UserImpl(ChatServer server, User serverUser, Socket socket, TextIO io, UserList users) throws IOException {
 
         this.server = server;
         this.serverUser = serverUser;
@@ -31,6 +33,7 @@ public class UserImpl implements User {
         input = new DataInputStream(socket.getInputStream());
         output = new DataOutputStream(socket.getOutputStream());
         isRunning = true;
+        this.users = users;
     }
 
     @Override
@@ -57,24 +60,15 @@ public class UserImpl implements User {
             sendMessage("Please enter your name: ");
 
             //Check if name is already in use
-            while(true) {
+            while(server.isOnline()) {
                 String temp = input.readUTF().trim();
-                List<User> users = server.getUsers();
-                boolean nameExists = false;
 
-                for(User user : users) {
-                    if(user.getName().equalsIgnoreCase(temp)) {
-                        nameExists = true;
-                    }
-                }
-
-                if(nameExists) {
+                if(users.nameExists(temp)) {
                         sendMessage("Not a valid name, try again!");
 
                 }else {
                     setName(temp);
                     server.addMessageToQueue(new MessageImpl(serverUser, "Welcome " + name + "!"));
-
                     break;
 
                 }
