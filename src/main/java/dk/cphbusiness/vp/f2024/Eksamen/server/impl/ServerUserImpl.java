@@ -22,15 +22,15 @@ public class ServerUserImpl implements User {
 
     @Override
     public void run() {
-        while (true) {
-            String message = io.get();
-            server.addMessageToQueue(new MessageImpl(this, message));
+        while (server.isOnline()) {
+            String text = io.get();
+            server.addMessageToQueue(new MessageImpl(this, text));
         }
     }
 
     @Override
     public void close() {
-
+        //not needed in serverUserImpl
     }
 
     @Override
@@ -44,12 +44,16 @@ public class ServerUserImpl implements User {
     }
 
     @Override
-    public void sendMessage(String message) throws IOException {
-        io.put(message);
+    public void sendMessage(String text) {
+        io.put(text);
     }
+    //Overload sendMessage til at sende direkte til en bruger
+
 
     @Override
     public void init() {
 
     }
+
+
 }

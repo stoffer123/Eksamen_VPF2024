@@ -1,7 +1,6 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
-import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.Broadcaster;
-import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
+import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.*;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
 import java.io.IOException;
@@ -9,12 +8,14 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public class BroadcasterImpl implements Broadcaster {
-    private BlockingQueue<MessageImpl> messages;
-    private List<User> users;
+    private BlockingQueue<Message> messages;
+    private UserList users;
+    private final ChatServer server;
     private final TextIO io;
 
-    public BroadcasterImpl(BlockingQueue<MessageImpl> messages, List<User> users, TextIO io) {
+    public BroadcasterImpl(BlockingQueue<Message> messages, ChatServer server, TextIO io, UserList users) {
             this.messages = messages;
+            this.server = server;
             this.users = users;
             this.io = io;
 
@@ -23,24 +24,17 @@ public class BroadcasterImpl implements Broadcaster {
     @Override
     public void run() {
         try {
-            while (messages != null) {
-                if (messages.isEmpty()) {
+            while (server.isOnline()) {
+                if(messages.isEmpty()) {
                     continue;
                 }
-                MessageImpl message = messages.take();
 
-                for (User user : users) {
-                    if (user == message.getUser()) {
-                        continue;
-                    }
-                    String msgToSend = "[" + message.getUser().getName() + "] " + message.getText();
-                    user.sendMessage(msgToSend);
-                }
+                users.sendAll(messages.take());
+
             }
         } catch (InterruptedException e) {
+            io.put("Broadcaster was interrupted while taking message from queue");
             io.put(e.getMessage());
-        }catch (IOException e){
-            io.put("Connection error" + e.getMessage());
         }
     }
 

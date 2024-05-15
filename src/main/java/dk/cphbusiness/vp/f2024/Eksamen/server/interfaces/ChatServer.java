@@ -7,9 +7,9 @@ import java.util.List;
 public interface ChatServer {
     void startServer();
     void stopServer();
-    void addMessageToQueue(MessageImpl message);
+    void addMessageToQueue(Message message);
     void removeUser(User user);
-    List<User> getUsers();
+    boolean isOnline();
 
 
 
