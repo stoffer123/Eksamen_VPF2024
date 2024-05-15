@@ -46,7 +46,7 @@ public class UserImpl implements User {
 
         } catch (IOException e) {
             close();
-            io.putError(e.getMessage() + " For user: " + name);
+            io.putError(e.getMessage() + " for user: " + name + " in run()");
         }
 
     }
@@ -86,12 +86,13 @@ public class UserImpl implements User {
     @Override
     public void close(){
         try {
+            isRunning = false;
             input.close();
             output.close();
             socket.close();
             server.removeUser(this);
         } catch (IOException e) {
-            io.put(e.getMessage());
+            io.putError("close() failed for user: " + name + " with message: " + e.getMessage());
         }
 
     }

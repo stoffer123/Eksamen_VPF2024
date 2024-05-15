@@ -5,11 +5,11 @@ import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 
 public class MessageImpl implements Message {
     private User user;
-    private String message;
+    private String text;
 
-    public MessageImpl(User user, String message) {
+    public MessageImpl(User user, String text) {
         this.user = user;
-        this.message = message;
+        this.text = text;
     }
 
     @Override
@@ -19,6 +19,6 @@ public class MessageImpl implements Message {
 
     @Override
     public String getText() {
-        return message;
+        return text;
     }
 }

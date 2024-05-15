@@ -1,6 +1,8 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.Broadcaster;
+import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
+import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.Message;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
@@ -9,13 +11,15 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public class BroadcasterImpl implements Broadcaster {
-    private BlockingQueue<MessageImpl> messages;
+    private BlockingQueue<Message> messages;
     private List<User> users;
+    private final ChatServer server;
     private final TextIO io;
 
-    public BroadcasterImpl(BlockingQueue<MessageImpl> messages, List<User> users, TextIO io) {
+    public BroadcasterImpl(BlockingQueue<Message> messages, ChatServer server, TextIO io) {
             this.messages = messages;
-            this.users = users;
+            this.server = server;
+            this.users = server.getUsers();
             this.io = io;
 
     }
@@ -27,7 +31,7 @@ public class BroadcasterImpl implements Broadcaster {
                 if (messages.isEmpty()) {
                     continue;
                 }
-                MessageImpl message = messages.take();
+                Message message = messages.take();
 
                 //evt whileLoop
                 for (User user : users) {
@@ -42,7 +46,7 @@ public class BroadcasterImpl implements Broadcaster {
         } catch (InterruptedException e) {
             io.put("Broadcaster was interrupted while taking message from queue");
             io.put(e.getMessage());
-        }catch (IOException e){
+        }catch (IOException e) {
 
             //Make more specific, fx which user caused the connection error?, maybe do try/catch inside for loop
             //deklarer variabel øverst
