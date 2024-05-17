@@ -47,7 +47,7 @@ public class UserImpl implements User {
             }
 
         } catch (IOException e) {
-            io.putError(e.getMessage() + " for user: " + name + " in run()");
+            io.putError("Lost connection to: " + name + " with message: " + e.getMessage());
         } finally {
             close();
         }
@@ -104,7 +104,7 @@ public class UserImpl implements User {
         }catch(IOException e) {
             io.putError(name + " Failed to close socket " + e.getMessage());
         }
-
+        server.addMessageToQueue(new MessageImpl(serverUser, name + " Disconnected!"));
         server.removeUser(this);
 
     }

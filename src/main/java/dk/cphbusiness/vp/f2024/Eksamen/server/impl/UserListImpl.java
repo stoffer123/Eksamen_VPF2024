@@ -35,14 +35,14 @@ public class UserListImpl implements UserList {
 
     @Override
     public synchronized void sendAll(Message message) {
-                for(User user : users) {
-                    if (user == message.getUser()) {
-                        continue;
-                    }
+        for(User user : users) {
+            if (user == message.getUser() && !user.getName().equalsIgnoreCase("SERVER")) {
+                continue;
+            }
 
-                    String msgToSend = "[" + message.getUser().getName() + "] " + message.getText();
-                    user.sendMessage(msgToSend);
-                }
+            String msgToSend = "[" + message.getUser().getName() + "] " + message.getText();
+            user.sendMessage(msgToSend);
+        }
     }
 
     @Override

@@ -22,12 +22,14 @@ public class TxtListener implements Runnable {
     @Override
     public void run() {
         try {
-            while(socket.isConnected()) {
+            while(client.isRunning()) {
                 String message = input.readUTF();
                 client.receiveMessage(message);
             }
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            io.putError("lost connection to the server");
+        }finally {
+            client.stop();
         }
     }
 }

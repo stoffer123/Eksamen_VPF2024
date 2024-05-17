@@ -14,6 +14,7 @@ public class ClientImpl implements Client {
     private final Socket socket;
     private final DataInputStream input;
     private final DataOutputStream output;
+    private boolean isRunning;
 
     public ClientImpl(String ip, int port, TextIO io) throws IOException {
         this.ip = ip;
@@ -22,13 +23,18 @@ public class ClientImpl implements Client {
         this.socket = new Socket(ip, port);
         this.input = new DataInputStream(socket.getInputStream());
         this.output = new DataOutputStream(socket.getOutputStream());
+        this.isRunning = true;
     }
 
     @Override
     public void run() {
         new Thread(new TxtListener(this, socket, input, io)).start();
-        while(socket.isConnected()) {
+        while(isRunning) {
             String message = io.get();
+            if(message.equalsIgnoreCase("/exit")) {
+                stop();
+            }
+
             sendMessage(message);
         }
     }
@@ -37,6 +43,25 @@ public class ClientImpl implements Client {
     public void stop() {
         //close socket and streams
         io.put("Shutting down");
+        isRunning = false;
+        try {
+            input.close();
+        }catch(IOException e) {
+            io.putError("Error closing input stream: " + e.getMessage());
+        }
+
+        try {
+            output.close();
+        }catch(IOException e) {
+            io.putError("Error closing output stream: " + e.getMessage());
+        }
+
+        try {
+            socket.close();
+        }catch(IOException e) {
+            io.putError("Error closing socket: " + e.getMessage());
+        }
+
         System.exit(0);
 
     }
@@ -47,7 +72,7 @@ public class ClientImpl implements Client {
         output.writeUTF(message);
 
         }catch(IOException e) {
-            io.put(e.getMessage());
+            io.putError("Error in sendMessage(): " + e.getMessage());
         }
     }
 
@@ -56,5 +81,8 @@ public class ClientImpl implements Client {
         io.put(message);
     }
 
-
+    @Override
+    public boolean isRunning() {
+        return isRunning;
+    }
 }
