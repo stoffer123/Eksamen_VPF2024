@@ -35,8 +35,6 @@ public class UserListImpl implements UserList {
 
     @Override
     public synchronized void sendAll(Message message) {
-        try {
-                //evt whileLoop
                 for(User user : users) {
                     if (user == message.getUser()) {
                         continue;
@@ -44,13 +42,7 @@ public class UserListImpl implements UserList {
 
                     String msgToSend = "[" + message.getUser().getName() + "] " + message.getText();
                     user.sendMessage(msgToSend);
-            }
-
-        }catch (IOException e) {
-            //Make more specific, fx which user caused the connection error?, maybe do try/catch inside for loop
-            //deklarer variabel øverst
-            io.putError("[ERROR] in: UserListImpl with message: " + e.getMessage());
-        }
+                }
     }
 
     @Override

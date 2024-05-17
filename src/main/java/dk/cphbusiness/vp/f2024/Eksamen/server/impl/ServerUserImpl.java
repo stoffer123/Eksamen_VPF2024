@@ -9,7 +9,7 @@ import java.io.*;
 
 public class ServerUserImpl implements User {
     private final ChatServer server;
-    private String name;
+    private final String name;
     private TextIO io;
 
 
@@ -52,7 +52,7 @@ public class ServerUserImpl implements User {
 
     @Override
     public void init() {
-
+        //not needed in serverUser
     }
 
 

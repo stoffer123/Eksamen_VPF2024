@@ -6,18 +6,15 @@ import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ChatServerImpl implements ChatServer {
-    private int port;
+    private final int port;
     private final TextIO io;
     private ServerSocket serverSocket;
-    private UserList users;
-    private BlockingQueue<Message> messages;
+    private final UserList users;
+    private final BlockingQueue<Message> messages;
     private boolean isOnline;
 
 
@@ -50,7 +47,9 @@ public class ChatServerImpl implements ChatServer {
 
             }
         }catch(IOException e) {
-            io.put(e.getMessage());
+            io.putError("Error in ChatServer.startserver: " + e.getMessage());
+        }finally {
+            stopServer();
         }
     }
 
@@ -58,14 +57,16 @@ public class ChatServerImpl implements ChatServer {
     public void stopServer() {
         io.put("Stopping server");
         isOnline = false;
-
         users.clear();
+        messages.clear();
+
         try {
         serverSocket.close();
 
-        System.exit(0);
         }catch(IOException e) {
-            io.put(e.getMessage());
+            io.putError("Failed to close server socket in ChatServer.stopServer() : " + e.getMessage());
+        }finally {
+            System.exit(0);
         }
 
 

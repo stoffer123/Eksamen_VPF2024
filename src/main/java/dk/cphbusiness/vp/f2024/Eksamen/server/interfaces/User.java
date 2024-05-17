@@ -8,7 +8,7 @@ public interface User extends Runnable {
      void close();
      String getName();
      void setName(String name);
-     void sendMessage(String message) throws IOException;
-     void init() throws IOException;
+     void sendMessage(String message);
+     void init();
 
 }

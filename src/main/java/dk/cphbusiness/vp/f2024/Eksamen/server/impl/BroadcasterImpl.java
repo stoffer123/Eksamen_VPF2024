@@ -23,18 +23,16 @@ public class BroadcasterImpl implements Broadcaster {
 
     @Override
     public void run() {
-        try {
-            while (server.isOnline()) {
-                if(messages.isEmpty()) {
-                    continue;
+        while (server.isOnline()) {
+            try {
+                if (!messages.isEmpty()) {
+                users.sendAll(messages.take());
                 }
 
-                users.sendAll(messages.take());
-
+            } catch (InterruptedException e) {
+                io.putError("Broadcaster was interrupted: " + e.getMessage());
+                Thread.interrupted(); // clear interrupted status to continue normal operation
             }
-        } catch (InterruptedException e) {
-            io.put("Broadcaster was interrupted while taking message from queue");
-            io.put(e.getMessage());
         }
     }
 
