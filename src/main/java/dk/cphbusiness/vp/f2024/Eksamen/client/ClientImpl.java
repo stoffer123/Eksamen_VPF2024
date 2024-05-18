@@ -11,19 +11,24 @@ public class ClientImpl implements Client {
     private final String ip;
     private final int port;
     private final TextIO io;
-    private final Socket socket;
-    private final DataInputStream input;
-    private final DataOutputStream output;
+    private Socket socket;
+    private DataInputStream input;
+    private DataOutputStream output;
     private boolean isRunning;
 
-    public ClientImpl(String ip, int port, TextIO io) throws IOException {
+    public ClientImpl(String ip, int port, TextIO io) {
         this.ip = ip;
         this.port = port;
         this.io = io;
-        this.socket = new Socket(ip, port);
-        this.input = new DataInputStream(socket.getInputStream());
-        this.output = new DataOutputStream(socket.getOutputStream());
         this.isRunning = true;
+        try {
+            this.socket = new Socket(this.ip, this.port);
+            this.input = new DataInputStream(socket.getInputStream());
+            this.output = new DataOutputStream(socket.getOutputStream());
+        }catch (IOException e) {
+            io.putError("Could not connect to " + ip + ":" + port);
+            stop();
+        }
     }
 
     @Override
