@@ -88,19 +88,28 @@ public class UserImpl implements User {
         //close resources individually to make sure everything gets closed.
         //[SUGGESTION] add null check?? no point in trying to close something that is null
         try{
+            if(input != null) {
             input.close();
+            }
+
         }catch(IOException e) {
             io.putError(name + " Failed to close input " + e.getMessage());
         }
 
         try{
+            if(output != null) {
             output.close();
+            }
+
         }catch(IOException e) {
             io.putError(name + " Failed to close output " + e.getMessage());
         }
 
         try{
+            if(socket != null) {
             socket.close();
+            }
+
         }catch(IOException e) {
             io.putError(name + " Failed to close socket " + e.getMessage());
         }

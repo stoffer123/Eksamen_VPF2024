@@ -61,7 +61,9 @@ public class ChatServerImpl implements ChatServer {
         messages.clear();
 
         try {
-        serverSocket.close();
+            if(serverSocket != null) {
+                serverSocket.close();
+            }
 
         }catch(IOException e) {
             io.putError("Failed to close server socket in ChatServer.stopServer() : " + e.getMessage());

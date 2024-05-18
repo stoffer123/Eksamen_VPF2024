@@ -39,7 +39,6 @@ public class ClientImpl implements Client {
             if(message.equalsIgnoreCase("/exit")) {
                 stop();
             }
-
             sendMessage(message);
         }
     }
@@ -50,19 +49,26 @@ public class ClientImpl implements Client {
         io.put("Shutting down");
         isRunning = false;
         try {
-            input.close();
+            if(input != null) {
+                input.close();
+            }
+
         }catch(IOException e) {
             io.putError("Error closing input stream: " + e.getMessage());
         }
 
         try {
+            if(output != null) {
             output.close();
+            }
         }catch(IOException e) {
             io.putError("Error closing output stream: " + e.getMessage());
         }
 
         try {
+            if(socket != null) {
             socket.close();
+            }
         }catch(IOException e) {
             io.putError("Error closing socket: " + e.getMessage());
         }
