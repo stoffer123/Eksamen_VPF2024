@@ -6,5 +6,6 @@ public interface Client extends Runnable {
     void stop();
     void sendMessage(String message);
     void receiveMessage(String message);
+    boolean isRunning();
 
 }
