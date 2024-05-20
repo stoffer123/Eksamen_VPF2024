@@ -4,6 +4,8 @@ import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 
 import java.util.Map;
 
+import static dk.cphbusiness.vp.f2024.Eksamen.server.impl.ChatServerImpl.logger;
+
 public class HelpCommand implements Command {
     private final Map<String, Command> commands;
     private final String description;
@@ -19,6 +21,7 @@ public class HelpCommand implements Command {
         for (Command command : commands.values()) {
             response.append(command.getDescription()).append("\n");
         }
+        logger.info(user.getName() + " Used /HELP");
         user.sendMessage(response.toString());
 
     }
