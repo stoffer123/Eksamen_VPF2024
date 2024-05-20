@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class SystemTextIO implements TextIO {
-    Scanner scanner;
+    private Scanner scanner;
 
     public SystemTextIO() {
         scanner = new Scanner(System.in);
@@ -14,11 +14,6 @@ public class SystemTextIO implements TextIO {
     @Override
     public void put(String message) {
         System.out.println(message);
-    }
-
-    @Override
-    public void putError(String message) {
-        System.out.println("[ERROR] " + message);
     }
 
     @Override
@@ -63,4 +58,5 @@ public class SystemTextIO implements TextIO {
     public int choose(String question, List<String> options, String choose) {
         return 0;
     }
+
 }

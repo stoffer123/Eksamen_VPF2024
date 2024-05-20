@@ -26,7 +26,7 @@ public class ClientImpl implements Client {
             this.input = new DataInputStream(socket.getInputStream());
             this.output = new DataOutputStream(socket.getOutputStream());
         }catch (IOException e) {
-            io.putError("Could not connect to " + ip + ":" + port);
+            io.put("Could not connect to " + ip + ":" + port);
             stop();
         }
     }
@@ -54,7 +54,7 @@ public class ClientImpl implements Client {
             }
 
         }catch(IOException e) {
-            io.putError("Error closing input stream: " + e.getMessage());
+            io.put("Error closing input stream: " + e.getMessage());
         }
 
         try {
@@ -62,7 +62,7 @@ public class ClientImpl implements Client {
             output.close();
             }
         }catch(IOException e) {
-            io.putError("Error closing output stream: " + e.getMessage());
+            io.put("Error closing output stream: " + e.getMessage());
         }
 
         try {
@@ -70,7 +70,7 @@ public class ClientImpl implements Client {
             socket.close();
             }
         }catch(IOException e) {
-            io.putError("Error closing socket: " + e.getMessage());
+            io.put("Error closing socket: " + e.getMessage());
         }
 
         System.exit(0);
@@ -83,7 +83,7 @@ public class ClientImpl implements Client {
         output.writeUTF(message);
 
         }catch(IOException e) {
-            io.putError("Error in sendMessage(): " + e.getMessage());
+            io.put("Error in sendMessage(): " + e.getMessage());
         }
     }
 

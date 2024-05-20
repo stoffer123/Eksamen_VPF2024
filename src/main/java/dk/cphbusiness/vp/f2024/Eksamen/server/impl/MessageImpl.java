@@ -4,21 +4,28 @@ import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.Message;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 
 public class MessageImpl implements Message {
-    private User user;
-    private String text;
+    private User sender;
+    private String rawText;
+    private String composedMessage;
 
-    public MessageImpl(User user, String text) {
-        this.user = user;
-        this.text = text;
+    public MessageImpl(User sender, String text) {
+        this.sender = sender;
+        this.rawText = text;
+        composedMessage = "[" + sender.getName() + "] " + text;
     }
 
     @Override
-    public User getUser() {
-        return user;
+    public User getSender() {
+        return sender;
     }
 
     @Override
-    public String getText() {
-        return text;
+    public String getRawText() {
+        return rawText;
+    }
+
+    @Override
+    public String getComposedMessage() {
+        return composedMessage;
     }
 }

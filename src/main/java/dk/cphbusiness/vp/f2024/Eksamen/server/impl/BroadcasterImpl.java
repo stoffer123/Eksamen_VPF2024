@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
+import static dk.cphbusiness.vp.f2024.Eksamen.server.impl.ChatServerImpl.logger;
+
 public class BroadcasterImpl implements Broadcaster {
     private BlockingQueue<Message> messages;
     private UserList users;
@@ -30,7 +32,8 @@ public class BroadcasterImpl implements Broadcaster {
                 }
 
             } catch (InterruptedException e) {
-                io.putError("Broadcaster was interrupted: " + e.getMessage());
+                String errorMsg = "Broadcaster was interrupted: " + e.getMessage();
+                logger.severe(errorMsg);
                 Thread.interrupted(); // clear interrupted status to continue normal operation
             }
         }

@@ -27,9 +27,10 @@ public class TxtListener implements Runnable {
                 client.receiveMessage(message);
             }
         } catch (IOException e) {
-            io.putError("Lost connection to the server");
-        }finally {
+            if(client.isRunning()){
+            io.put("Lost connection to the server");
             client.stop();
+            }
         }
     }
 }

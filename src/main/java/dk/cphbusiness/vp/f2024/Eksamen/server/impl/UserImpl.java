@@ -10,6 +10,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import static dk.cphbusiness.vp.f2024.Eksamen.server.impl.ChatServerImpl.logger;
+
 public class UserImpl implements User {
     private final ChatServer server;
     private final User serverUser;
@@ -47,7 +49,8 @@ public class UserImpl implements User {
             }
 
         } catch (IOException e) {
-            io.putError("Lost connection to: " + name + " with message: " + e.getMessage());
+            String errorMsg = "Lost connection to: " + name + " with message: " + e.getMessage();
+            logger.severe(errorMsg);
         } finally {
             close();
         }
@@ -76,7 +79,9 @@ public class UserImpl implements User {
 
             }
         } catch (IOException e) {
-            io.putError(e.getMessage() + " for user: " + name + " in run()");
+            String errorMsg = e.getMessage() + " for user: " + name + " in run()";
+            logger.severe(errorMsg);
+
             close();
         }
 
@@ -93,7 +98,8 @@ public class UserImpl implements User {
             }
 
         }catch(IOException e) {
-            io.putError(name + " Failed to close input " + e.getMessage());
+            String errorMsg = name + " Failed to close inputStream " + e.getMessage();
+            logger.severe(errorMsg);
         }
 
         try{
@@ -102,7 +108,8 @@ public class UserImpl implements User {
             }
 
         }catch(IOException e) {
-            io.putError(name + " Failed to close output " + e.getMessage());
+            String errorMsg = name + " Failed to close outputStream " + e.getMessage();
+            logger.severe(errorMsg);
         }
 
         try{
@@ -111,7 +118,8 @@ public class UserImpl implements User {
             }
 
         }catch(IOException e) {
-            io.putError(name + " Failed to close socket " + e.getMessage());
+            String errorMsg = name + " Failed to close socket " + e.getMessage();
+            logger.severe(errorMsg);
         }
         server.addMessageToQueue(new MessageImpl(serverUser, name + " Disconnected!"));
         server.removeUser(this);
@@ -133,7 +141,8 @@ public class UserImpl implements User {
         try {
             output.writeUTF(text);
         }catch (IOException e) {
-            io.putError("sendMessage() failed for user: " + name + " with message: " + e.getMessage());
+            String errorMsg = "sendMessage() failed for user: " + name + " with message: " + e.getMessage();
+            logger.severe(errorMsg);
         }
     }
 

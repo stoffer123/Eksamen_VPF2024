@@ -6,7 +6,6 @@ import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.UserList;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +35,11 @@ public class UserListImpl implements UserList {
     @Override
     public synchronized void sendAll(Message message) {
         for(User user : users) {
-            if (user == message.getUser() && !user.getName().equalsIgnoreCase("SERVER")) {
+            if (user == message.getSender() && !user.getName().equalsIgnoreCase("SERVER")) {
                 continue;
             }
 
-            String msgToSend = "[" + message.getUser().getName() + "] " + message.getText();
+            String msgToSend = message.getComposedMessage();
             user.sendMessage(msgToSend);
         }
     }

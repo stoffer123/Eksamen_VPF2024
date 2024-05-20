@@ -11,8 +11,10 @@ public class ServerMain {
             System.exit(0);
         }
         int port = Integer.parseInt(args[0]);
+
+        String logFilePath = "C:\\Users\\chris\\Desktop\\logger_Test";
         TextIO io = new SystemTextIO();
-        ChatServerImpl server = new ChatServerImpl(port, io);
+        ChatServerImpl server = new ChatServerImpl(port, io, logFilePath);
         server.startServer();
 
     }
