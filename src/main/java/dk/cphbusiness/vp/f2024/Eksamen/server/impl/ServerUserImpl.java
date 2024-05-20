@@ -1,5 +1,6 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
+import dk.cphbusiness.vp.f2024.Eksamen.server.commands.Command;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.SystemTextIO;
@@ -24,7 +25,12 @@ public class ServerUserImpl implements User {
     public void run() {
         while (server.isOnline()) {
             String text = io.get();
-            server.addMessageToQueue(new MessageImpl(this, text));
+
+            if (text.startsWith("/")) {
+                handleCommand(text);
+            } else {
+                server.addMessageToQueue(new MessageImpl(this, text));
+            }
         }
     }
 
@@ -47,7 +53,6 @@ public class ServerUserImpl implements User {
     public void sendMessage(String text) {
         io.put(text);
     }
-    //Overload sendMessage til at sende direkte til en bruger
 
 
     @Override
@@ -55,5 +60,16 @@ public class ServerUserImpl implements User {
         //not needed in serverUser
     }
 
+    @Override
+    public void handleCommand(String text) {
+        String[] parts = text.split(" ");
+        String commandName = parts[0].substring(1);
+        Command command = server.getCommand(commandName);
 
+        if(command != null) {
+            command.execute(this, parts);
+        } else {
+            sendMessage("Unknown command: " + commandName);
+        }
+    }
 }

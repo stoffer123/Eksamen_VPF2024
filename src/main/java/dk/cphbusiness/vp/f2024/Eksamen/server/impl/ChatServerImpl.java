@@ -1,5 +1,8 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
+import dk.cphbusiness.vp.f2024.Eksamen.server.commands.Command;
+import dk.cphbusiness.vp.f2024.Eksamen.server.commands.HelpCommand;
+import dk.cphbusiness.vp.f2024.Eksamen.server.commands.WhoCommand;
 import dk.cphbusiness.vp.f2024.Eksamen.server.formatter.LogFormatter;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.*;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
@@ -10,7 +13,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Formatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.ConsoleHandler;
@@ -28,6 +32,7 @@ public class ChatServerImpl implements ChatServer {
     private final BlockingQueue<Message> messages;
     private boolean isOnline;
     private final String logFilePath;
+    private final Map<String, Command> commands;
 
 
 
@@ -38,8 +43,12 @@ public class ChatServerImpl implements ChatServer {
         messages = new LinkedBlockingQueue<>(100);
         isOnline = true;
         this.logFilePath = logFilePath;
+        commands = new HashMap<>();
 
         configureLogger(this.logFilePath);
+        registerCommands();
+
+
         logger.info("Server started on port " + port);
 
     }
@@ -64,6 +73,7 @@ public class ChatServerImpl implements ChatServer {
                 new Thread(user).start();
 
             }
+
         }catch(IOException e) {
             String errorMsg = "Error in ChatServer.startserver: " + e.getMessage();
             logger.severe(errorMsg);
@@ -71,6 +81,7 @@ public class ChatServerImpl implements ChatServer {
         }finally {
             stopServer();
         }
+
     }
 
     @Override
@@ -159,6 +170,18 @@ public class ChatServerImpl implements ChatServer {
         FileHandler fileHandler = new FileHandler(logFilePath, true);
         fileHandler.setFormatter(logFormat);
         return fileHandler;
+    }
+
+    @Override
+    public void registerCommands() {
+        commands.put("who", new WhoCommand(users));
+        commands.put("help", new HelpCommand(commands));
+
+    }
+
+    @Override
+    public Command getCommand(String name) {
+        return commands.get(name);
     }
 
 }

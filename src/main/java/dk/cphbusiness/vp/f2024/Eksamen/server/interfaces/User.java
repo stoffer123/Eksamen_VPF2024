@@ -1,8 +1,5 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server.interfaces;
 
-import java.io.IOException;
-import java.net.Socket;
-
 public interface User extends Runnable {
      void run();
      void close();
@@ -10,5 +7,6 @@ public interface User extends Runnable {
      void setName(String name);
      void sendMessage(String message);
      void init();
+     void handleCommand(String text);
 
 }

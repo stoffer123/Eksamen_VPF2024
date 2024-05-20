@@ -33,7 +33,7 @@ public class BroadcasterImpl implements Broadcaster {
 
             } catch (InterruptedException e) {
                 String errorMsg = "Broadcaster was interrupted: " + e.getMessage();
-                logger.severe(errorMsg);
+                logger.warning(errorMsg);
                 Thread.interrupted(); // clear interrupted status to continue normal operation
             }
         }

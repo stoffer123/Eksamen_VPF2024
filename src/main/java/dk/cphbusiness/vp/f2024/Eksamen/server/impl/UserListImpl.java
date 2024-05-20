@@ -9,6 +9,8 @@ import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dk.cphbusiness.vp.f2024.Eksamen.server.impl.ChatServerImpl.logger;
+
 public class UserListImpl implements UserList {
     private List<User> users;
     private ChatServer server;
@@ -25,23 +27,31 @@ public class UserListImpl implements UserList {
     @Override
     public synchronized void addUser(User user) {
         users.add(user);
+        logger.info(user.getName() + " added to user list");
+    }
+
+    @Override
+    public List<User> getUsers() {
+        return new ArrayList<>(users);
     }
 
     @Override
     public synchronized void removeUser(User user) {
         users.remove(user);
+        logger.info(user.getName() + " removed from user list");
     }
 
     @Override
     public synchronized void sendAll(Message message) {
+
         for(User user : users) {
-            if (user == message.getSender() && !user.getName().equalsIgnoreCase("SERVER")) {
+            String msgToSend = message.getComposedMessage();
+            if (user == message.getSender() /*&& !user.getName().equalsIgnoreCase("SERVER")*/) {
                 continue;
             }
-
-            String msgToSend = message.getComposedMessage();
             user.sendMessage(msgToSend);
         }
+        logger.info("ALL -> " + message.getComposedMessage());
     }
 
     @Override
@@ -50,6 +60,7 @@ public class UserListImpl implements UserList {
             user.close();
         }
         users.clear();
+        logger.info("clear() All users cleared!");
     }
 
     @Override

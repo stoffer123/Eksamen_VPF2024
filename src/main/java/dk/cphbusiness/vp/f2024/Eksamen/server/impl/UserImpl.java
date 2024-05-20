@@ -1,5 +1,6 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
+import dk.cphbusiness.vp.f2024.Eksamen.server.commands.Command;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.UserList;
@@ -44,13 +45,17 @@ public class UserImpl implements User {
         try {
             while (isRunning) {
                 String text = input.readUTF();
+                if (text.startsWith("/")) {
+                    handleCommand(text);
+                } else {
                 server.addMessageToQueue(new MessageImpl(this, text));
+                }
 
             }
 
         } catch (IOException e) {
             String errorMsg = "Lost connection to: " + name + " with message: " + e.getMessage();
-            logger.severe(errorMsg);
+            logger.warning(errorMsg);
         } finally {
             close();
         }
@@ -79,8 +84,8 @@ public class UserImpl implements User {
 
             }
         } catch (IOException e) {
-            String errorMsg = e.getMessage() + " for user: " + name + " in run()";
-            logger.severe(errorMsg);
+            String errorMsg = e.getMessage() + " for user: " + name + " in init(), closing connection";
+            logger.warning(errorMsg);
 
             close();
         }
@@ -91,7 +96,6 @@ public class UserImpl implements User {
     public void close(){
         isRunning = false;
         //close resources individually to make sure everything gets closed.
-        //[SUGGESTION] add null check?? no point in trying to close something that is null
         try{
             if(input != null) {
             input.close();
@@ -99,7 +103,7 @@ public class UserImpl implements User {
 
         }catch(IOException e) {
             String errorMsg = name + " Failed to close inputStream " + e.getMessage();
-            logger.severe(errorMsg);
+            logger.warning(errorMsg);
         }
 
         try{
@@ -109,7 +113,7 @@ public class UserImpl implements User {
 
         }catch(IOException e) {
             String errorMsg = name + " Failed to close outputStream " + e.getMessage();
-            logger.severe(errorMsg);
+            logger.warning(errorMsg);
         }
 
         try{
@@ -119,10 +123,11 @@ public class UserImpl implements User {
 
         }catch(IOException e) {
             String errorMsg = name + " Failed to close socket " + e.getMessage();
-            logger.severe(errorMsg);
+            logger.warning(errorMsg);
         }
         server.addMessageToQueue(new MessageImpl(serverUser, name + " Disconnected!"));
         server.removeUser(this);
+        logger.info(name + " Disconnected!");
 
     }
 
@@ -133,6 +138,7 @@ public class UserImpl implements User {
 
     @Override
     public void setName(String name) {
+        logger.info(this.name + " changed name to: " + name);
         this.name = name;
     }
 
@@ -142,8 +148,21 @@ public class UserImpl implements User {
             output.writeUTF(text);
         }catch (IOException e) {
             String errorMsg = "sendMessage() failed for user: " + name + " with message: " + e.getMessage();
-            logger.severe(errorMsg);
+            logger.warning(errorMsg);
         }
     }
 
+    @Override
+    public void handleCommand(String text) {
+        String[] parts = text.split(" ");
+        String commandName = parts[0].substring(1);
+        Command command = server.getCommand(commandName);
+
+        if(command != null) {
+            command.execute(this, parts);
+        } else {
+            sendMessage("Unknown command: " + commandName);
+        }
+
+    }
 }
