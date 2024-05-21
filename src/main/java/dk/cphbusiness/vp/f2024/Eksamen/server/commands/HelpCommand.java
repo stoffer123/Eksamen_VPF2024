@@ -20,7 +20,6 @@ public class HelpCommand implements Command {
         for (Command command : commands.values()) {
             response.append(command.getDescription()).append("\n");
         }
-        logger.info(user.getName() + " Used /HELP");
         user.sendMessage(response.toString());
 
     }

@@ -18,8 +18,8 @@ public class ServerUserImpl implements User {
         this.name = "SERVER";
         this.io = io;
         role = Role.SERVER;
-
     }
+
 
     @Override
     public void run() {
@@ -73,8 +73,11 @@ public class ServerUserImpl implements User {
         }
     }
 
+
     @Override
     public Role getRole() {
         return role;
     }
+
+
 }

@@ -21,7 +21,6 @@ public class WhoCommand implements Command {
             response.append(u.getName()).append("\n");
         }
 
-        logger.info(user.getName() + " used /WHO");
         user.sendMessage(response.toString());
     }
 

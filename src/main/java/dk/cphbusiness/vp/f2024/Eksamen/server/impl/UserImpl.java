@@ -87,9 +87,6 @@ public class UserImpl implements User {
 
             }
         } catch (IOException e) {
-            String errorMsg = e.getMessage() + " for user: " + name + " in init(), closing connection";
-            logger.warning(errorMsg);
-
             close();
         }
 
@@ -97,6 +94,9 @@ public class UserImpl implements User {
 
     @Override
     public void close(){
+        //Ensure close() is only called once
+        if(!isRunning) return;
+
         isRunning = false;
         //close resources individually to make sure everything gets closed.
         try{
@@ -105,8 +105,7 @@ public class UserImpl implements User {
             }
 
         }catch(IOException e) {
-            String errorMsg = name + " Failed to close inputStream " + e.getMessage();
-            logger.warning(errorMsg);
+            logger.warning(name + " Failed to close inputStream " + e.getMessage());
         }
 
         try{
@@ -115,8 +114,7 @@ public class UserImpl implements User {
             }
 
         }catch(IOException e) {
-            String errorMsg = name + " Failed to close outputStream " + e.getMessage();
-            logger.warning(errorMsg);
+            logger.warning(name + " Failed to close outputStream " + e.getMessage());
         }
 
         try{
@@ -125,8 +123,7 @@ public class UserImpl implements User {
             }
 
         }catch(IOException e) {
-            String errorMsg = name + " Failed to close socket " + e.getMessage();
-            logger.warning(errorMsg);
+            logger.warning(name + " Failed to close socket " + e.getMessage());
         }
         server.addMessageToQueue(new MessageImpl(serverUser, name + " Disconnected!"));
         server.removeUser(this);
@@ -163,6 +160,7 @@ public class UserImpl implements User {
 
         if(command != null) {
             command.execute(this, parts);
+            logger.info(this.name + " used /" + commandName);
         } else {
             sendMessage("Unknown command: " + commandName);
         }
