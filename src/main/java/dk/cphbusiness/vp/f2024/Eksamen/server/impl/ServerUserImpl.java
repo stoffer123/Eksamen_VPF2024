@@ -10,12 +10,14 @@ public class ServerUserImpl implements User {
     private final ChatServer server;
     private final String name;
     private TextIO io;
+    private Role role;
 
 
     public ServerUserImpl(ChatServer server, TextIO io) {
         this.server = server;
         this.name = "SERVER";
         this.io = io;
+        role = Role.SERVER;
 
     }
 
@@ -69,5 +71,10 @@ public class ServerUserImpl implements User {
         } else {
             sendMessage("Unknown command: " + commandName);
         }
+    }
+
+    @Override
+    public Role getRole() {
+        return role;
     }
 }

@@ -24,6 +24,7 @@ public class UserImpl implements User {
     private final TextIO io;
     private boolean isRunning;
     private final UserList users;
+    private Role role;
 
 
     public UserImpl(ChatServer server, User serverUser, Socket socket, TextIO io, UserList users) throws IOException {
@@ -37,6 +38,7 @@ public class UserImpl implements User {
         output = new DataOutputStream(socket.getOutputStream());
         isRunning = true;
         this.users = users;
+        role = Role.USER;
     }
 
     @Override
@@ -165,5 +167,10 @@ public class UserImpl implements User {
             sendMessage("Unknown command: " + commandName);
         }
 
+    }
+
+    @Override
+    public Role getRole() {
+        return role;
     }
 }

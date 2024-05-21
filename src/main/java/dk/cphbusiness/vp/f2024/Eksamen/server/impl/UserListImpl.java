@@ -47,7 +47,7 @@ public class UserListImpl implements UserList {
 
         for(User user : users) {
             String msgToSend = message.getComposedMessage();
-            if (user == message.getSender() /*&& !user.getName().equalsIgnoreCase("SERVER")*/) {
+            if (user == message.getSender()) {
                 continue;
             }
             user.sendMessage(msgToSend);

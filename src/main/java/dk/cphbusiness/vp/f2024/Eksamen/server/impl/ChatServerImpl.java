@@ -2,6 +2,7 @@ package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
 import dk.cphbusiness.vp.f2024.Eksamen.server.commands.Command;
 import dk.cphbusiness.vp.f2024.Eksamen.server.commands.HelpCommand;
+import dk.cphbusiness.vp.f2024.Eksamen.server.commands.KickCommand;
 import dk.cphbusiness.vp.f2024.Eksamen.server.commands.WhoCommand;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.*;
 import dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger;
@@ -120,6 +121,7 @@ public class ChatServerImpl implements ChatServer {
     public void registerCommands() {
         commands.put("who", new WhoCommand(users));
         commands.put("help", new HelpCommand(commands));
+        commands.put("kick", new KickCommand(users));
 
     }
 
