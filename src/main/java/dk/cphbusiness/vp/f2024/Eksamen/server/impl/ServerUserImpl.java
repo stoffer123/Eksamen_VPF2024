@@ -5,6 +5,7 @@ import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
+import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger.logger;
 
 public class ServerUserImpl implements User {
     private final ChatServer server;
@@ -68,6 +69,7 @@ public class ServerUserImpl implements User {
 
         if(command != null) {
             command.execute(this, parts);
+            logger.info(this.name + " used /" + commandName);
         } else {
             sendMessage("Unknown command: " + commandName);
         }

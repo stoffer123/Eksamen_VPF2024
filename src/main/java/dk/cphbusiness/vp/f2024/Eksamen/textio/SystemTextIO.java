@@ -4,12 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class SystemTextIO implements TextIO {
-    private Scanner scanner;
-
-    public SystemTextIO() {
-        scanner = new Scanner(System.in);
-    }
-
+    private static final Scanner scanner = new Scanner(System.in);
 
     @Override
     public void put(String message) {

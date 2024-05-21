@@ -18,8 +18,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger.logger;
 
 public class ChatServerImpl implements ChatServer {
-    //public static final Logger logger = Logger.getLogger(ChatServerImpl.class.getName());
-
     private final int port;
     private final TextIO io;
     private ServerSocket serverSocket;
