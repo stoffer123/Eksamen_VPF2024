@@ -31,6 +31,7 @@ public class KickCommand implements Command {
             return;
         }
 
+
         //Check amount of arguments
         if(args.length != 2) {
             user.sendMessage("Too few/many arguments - usage: /kick <target>");
@@ -43,6 +44,7 @@ public class KickCommand implements Command {
                 target = u;
             }
         }
+
         //If username was found close the user else say no user was found
         if(target != null) {
             target.sendMessage("You have been kicked by: " + user.getName());

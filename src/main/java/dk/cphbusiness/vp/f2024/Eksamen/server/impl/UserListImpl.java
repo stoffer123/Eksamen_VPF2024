@@ -13,14 +13,14 @@ import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger.logger;
 
 
 public class UserListImpl implements UserList {
-    private List<User> users;
-    private ChatServer server;
-    private TextIO io;
+    private final List<User> users;
+    private final ChatServer server;
+    private final TextIO io;
 
     public UserListImpl(ChatServer server, TextIO io) {
         this.server = server;
         this.io = io;
-        users = new ArrayList<User>();
+        users = new ArrayList<>();
     }
 
 
@@ -31,10 +31,12 @@ public class UserListImpl implements UserList {
         logger.info(user.getName() + " added to user list");
     }
 
+
     @Override
     public List<User> getUsers() {
         return new ArrayList<>(users);
     }
+
 
     @Override
     public synchronized void removeUser(User user) {
