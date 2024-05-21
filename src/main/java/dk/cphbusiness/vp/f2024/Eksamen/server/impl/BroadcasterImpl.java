@@ -2,12 +2,9 @@ package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.*;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
-
-import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
-import static dk.cphbusiness.vp.f2024.Eksamen.server.impl.ChatServerImpl.logger;
+import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger.logger;
 
 public class BroadcasterImpl implements Broadcaster {
     private BlockingQueue<Message> messages;

@@ -3,8 +3,7 @@ package dk.cphbusiness.vp.f2024.Eksamen.server.commands;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 
 import java.util.Map;
-
-import static dk.cphbusiness.vp.f2024.Eksamen.server.impl.ChatServerImpl.logger;
+import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger.logger;
 
 public class HelpCommand implements Command {
     private final Map<String, Command> commands;

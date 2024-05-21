@@ -3,10 +3,8 @@ package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 import dk.cphbusiness.vp.f2024.Eksamen.server.commands.Command;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
-import dk.cphbusiness.vp.f2024.Eksamen.textio.SystemTextIO;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
-import java.io.*;
 
 public class ServerUserImpl implements User {
     private final ChatServer server;

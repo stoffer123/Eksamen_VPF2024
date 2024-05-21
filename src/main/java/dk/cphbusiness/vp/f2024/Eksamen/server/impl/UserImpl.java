@@ -11,7 +11,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import static dk.cphbusiness.vp.f2024.Eksamen.server.impl.ChatServerImpl.logger;
+import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger.logger;
+
 
 public class UserImpl implements User {
     private final ChatServer server;

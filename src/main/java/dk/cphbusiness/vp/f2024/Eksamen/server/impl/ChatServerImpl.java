@@ -3,27 +3,21 @@ package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 import dk.cphbusiness.vp.f2024.Eksamen.server.commands.Command;
 import dk.cphbusiness.vp.f2024.Eksamen.server.commands.HelpCommand;
 import dk.cphbusiness.vp.f2024.Eksamen.server.commands.WhoCommand;
-import dk.cphbusiness.vp.f2024.Eksamen.server.formatter.LogFormatter;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.*;
+import dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
-
-import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Logger;
+
+import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger.logger;
 
 public class ChatServerImpl implements ChatServer {
-    public static final Logger logger = Logger.getLogger(ChatServerImpl.class.getName());
+    //public static final Logger logger = Logger.getLogger(ChatServerImpl.class.getName());
 
     private final int port;
     private final TextIO io;
@@ -33,7 +27,7 @@ public class ChatServerImpl implements ChatServer {
     private boolean isOnline;
     private final String logFilePath;
     private final Map<String, Command> commands;
-
+    private final ServerLogger serverLogger;
 
 
     public ChatServerImpl(int port, TextIO io, String logFilePath) {
@@ -44,8 +38,7 @@ public class ChatServerImpl implements ChatServer {
         isOnline = true;
         this.logFilePath = logFilePath;
         commands = new HashMap<>();
-
-        configureLogger(this.logFilePath);
+        serverLogger = new ServerLogger(this, logFilePath);
         registerCommands();
 
 
@@ -121,55 +114,6 @@ public class ChatServerImpl implements ChatServer {
     @Override
     public boolean isOnline() {
         return isOnline;
-    }
-
-
-    private void configureLogger(String filepath) {
-        String logFilepath = filepath;
-
-        try {
-            // Remove default console handler if present
-            Logger rootLogger = Logger.getLogger("");
-            Handler[] handlers = rootLogger.getHandlers();
-            for (Handler handler : handlers) {
-                if (handler instanceof ConsoleHandler) {
-                    rootLogger.removeHandler(handler);
-                }
-            }
-
-            // Setup custom log formatter
-            LogFormatter logFormat = new LogFormatter();
-
-            // Setup file handler
-            FileHandler fileHandler = getFileHandler(logFilepath, logFormat);
-            logger.addHandler(fileHandler);
-
-            // Setup console handler
-            ConsoleHandler consoleHandler = new ConsoleHandler();
-            consoleHandler.setFormatter(logFormat);
-            logger.addHandler(consoleHandler);
-
-        } catch (IOException e) {
-            System.err.println("Failed to set up logger: " + e.getMessage());
-            stopServer();
-        }
-    }
-
-    private static FileHandler getFileHandler(String logDirectory, LogFormatter logFormat) throws IOException {
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        String dateStr = formatter.format(date);
-
-        String logFilePath = logDirectory + "\\" + dateStr + "-server.log";
-
-        File logDir = new File(logDirectory);
-        if (!logDir.exists()) {
-            logDir.mkdirs();
-        }
-
-        FileHandler fileHandler = new FileHandler(logFilePath, true);
-        fileHandler.setFormatter(logFormat);
-        return fileHandler;
     }
 
     @Override

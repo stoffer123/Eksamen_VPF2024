@@ -1,4 +1,4 @@
-package dk.cphbusiness.vp.f2024.Eksamen.server.formatter;
+package dk.cphbusiness.vp.f2024.Eksamen.server.logger;
 
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;

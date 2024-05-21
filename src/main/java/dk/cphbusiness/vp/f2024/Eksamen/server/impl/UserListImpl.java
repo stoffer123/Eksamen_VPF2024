@@ -9,7 +9,8 @@ import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dk.cphbusiness.vp.f2024.Eksamen.server.impl.ChatServerImpl.logger;
+import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger.logger;
+
 
 public class UserListImpl implements UserList {
     private List<User> users;
@@ -51,7 +52,7 @@ public class UserListImpl implements UserList {
             }
             user.sendMessage(msgToSend);
         }
-        logger.info("ALL -> " + message.getComposedMessage());
+        logger.info("ALL <- " + message.getComposedMessage());
     }
 
     @Override
