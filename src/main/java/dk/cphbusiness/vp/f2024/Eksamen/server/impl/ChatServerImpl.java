@@ -119,11 +119,17 @@ public class ChatServerImpl implements ChatServer {
 
     @Override
     public void registerCommands() {
+        //USER Commands
         commands.put("help", new HelpCommand(commands));
         commands.put("who", new WhoCommand(users));
+
+        //ADMIN Commands
         commands.put("kick", new KickCommand(users));
+
+        //SERVER Commands
         commands.put("addadmin", new AddAdminCommand(users));
         commands.put("removeadmin", new RemoveAdminCommand(users));
+        commands.put("shutdown", new ShutdownCommand(this));
 
 
     }
