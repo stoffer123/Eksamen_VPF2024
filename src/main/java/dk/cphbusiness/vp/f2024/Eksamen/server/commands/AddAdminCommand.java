@@ -27,7 +27,7 @@ public class AddAdminCommand implements Command {
 
         //Check if user is ADMIN or SERVER
         if(userRole != Role.SERVER) {
-            user.sendMessage("This is an SERVER command!");
+            user.sendMessage("This is a SERVER command!");
             return;
         }
 

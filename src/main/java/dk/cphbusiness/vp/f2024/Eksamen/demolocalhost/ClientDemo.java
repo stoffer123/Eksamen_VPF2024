@@ -1,18 +1,18 @@
-package dk.cphbusiness.vp.f2024.Eksamen.client.demo;
+package dk.cphbusiness.vp.f2024.Eksamen.demolocalhost;
 
 import dk.cphbusiness.vp.f2024.Eksamen.client.Client;
 import dk.cphbusiness.vp.f2024.Eksamen.client.ClientImpl;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.SystemTextIO;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
-import java.io.IOException;
-
-public class ClientMain {
+public class ClientDemo {
     public static void main(String[] args) {
+        String ip = "127.0.0.1";
+        int port = 23456;
+
         TextIO io = new SystemTextIO();
-            //Find port register på stackoverflow
-            Client client = new ClientImpl("127.0.0.1", 23456, io);
-            client.run();
+        Client client = new ClientImpl(ip, port, io);
+        client.run();
 
 
     }
