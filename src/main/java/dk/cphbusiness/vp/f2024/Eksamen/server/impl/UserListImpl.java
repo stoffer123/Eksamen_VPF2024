@@ -9,7 +9,8 @@ import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger.logger;
+import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ChatLogger.chatLogger;
+import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.SystemLogger.systemLogger;
 
 
 public class UserListImpl implements UserList {
@@ -28,7 +29,6 @@ public class UserListImpl implements UserList {
     @Override
     public synchronized void addUser(User user) {
         users.add(user);
-        logger.info(user.getName() + " added to user list");
     }
 
 
@@ -41,7 +41,6 @@ public class UserListImpl implements UserList {
     @Override
     public synchronized void removeUser(User user) {
         users.remove(user);
-        logger.info(user.getName() + " removed from user list");
     }
 
     @Override
@@ -54,7 +53,9 @@ public class UserListImpl implements UserList {
             }
             user.sendMessage(msgToSend);
         }
-        logger.info("ALL <- " + message.getComposedMessage());
+            chatLogger.info("[ALL] <- " + message.getComposedMessage());
+        //logger.info("ALL <- " + message.getComposedMessage()); - Replace with a chatLogger
+
     }
 
     @Override
@@ -63,7 +64,7 @@ public class UserListImpl implements UserList {
             user.close();
         }
         users.clear();
-        logger.info("clear() All users cleared!");
+        systemLogger.info("clear() All users cleared!");
     }
 
     @Override

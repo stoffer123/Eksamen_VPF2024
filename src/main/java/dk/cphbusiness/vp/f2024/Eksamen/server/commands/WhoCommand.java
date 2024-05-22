@@ -3,8 +3,6 @@ package dk.cphbusiness.vp.f2024.Eksamen.server.commands;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.UserList;
 
-import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger.logger;
-
 public class WhoCommand implements Command {
     private final UserList users;
     private final String description;
@@ -18,7 +16,7 @@ public class WhoCommand implements Command {
     public void execute(User user, String[] args) {
         StringBuilder response = new StringBuilder("Connected users:\n");
         for (User u : users.getUsers()) {
-            response.append(u.getName()).append("\n");
+            response.append("[" + u.getRole().name() + "] " + u.getName()).append("\n");
         }
 
         user.sendMessage(response.toString());

@@ -5,7 +5,7 @@ import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
-import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger.logger;
+import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.SystemLogger.systemLogger;
 
 public class ServerUserImpl implements User {
     private final ChatServer server;
@@ -69,7 +69,7 @@ public class ServerUserImpl implements User {
 
         if(command != null) {
             command.execute(this, parts);
-            logger.info(this.name + " used /" + commandName);
+            systemLogger.info(this.name + " used /" + commandName);
         } else {
             sendMessage("Unknown command: " + commandName);
         }
@@ -79,6 +79,11 @@ public class ServerUserImpl implements User {
     @Override
     public Role getRole() {
         return role;
+    }
+
+    @Override
+    public void setRole(Role role) {
+        io.put("SERVER cannot change role!");
     }
 
 

@@ -11,7 +11,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger.logger;
+import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.SystemLogger.systemLogger;
 
 
 public class UserImpl implements User {
@@ -58,7 +58,7 @@ public class UserImpl implements User {
 
         } catch (IOException e) {
             String errorMsg = "Lost connection to: " + name + " with message: " + e.getMessage();
-            logger.warning(errorMsg);
+            systemLogger.warning(errorMsg);
         } finally {
             close();
         }
@@ -105,7 +105,7 @@ public class UserImpl implements User {
             }
 
         }catch(IOException e) {
-            logger.warning(name + " Failed to close inputStream " + e.getMessage());
+            systemLogger.warning(name + " Failed to close inputStream " + e.getMessage());
         }
 
         try{
@@ -114,7 +114,7 @@ public class UserImpl implements User {
             }
 
         }catch(IOException e) {
-            logger.warning(name + " Failed to close outputStream " + e.getMessage());
+            systemLogger.warning(name + " Failed to close outputStream " + e.getMessage());
         }
 
         try{
@@ -123,11 +123,11 @@ public class UserImpl implements User {
             }
 
         }catch(IOException e) {
-            logger.warning(name + " Failed to close socket " + e.getMessage());
+            systemLogger.warning(name + " Failed to close socket " + e.getMessage());
         }
         server.addMessageToQueue(new MessageImpl(serverUser, name + " Disconnected!"));
         server.removeUser(this);
-        logger.info(name + " Disconnected!");
+        systemLogger.info(name + " Disconnected!");
 
     }
 
@@ -138,7 +138,7 @@ public class UserImpl implements User {
 
     @Override
     public void setName(String name) {
-        logger.info(this.name + " changed name to: " + name);
+        systemLogger.info(this.name + " changed name to: " + name);
         this.name = name;
     }
 
@@ -148,7 +148,7 @@ public class UserImpl implements User {
             output.writeUTF(text);
         }catch (IOException e) {
             String errorMsg = "sendMessage() failed for user: " + name + " with message: " + e.getMessage();
-            logger.warning(errorMsg);
+            systemLogger.warning(errorMsg);
         }
     }
 
@@ -160,7 +160,7 @@ public class UserImpl implements User {
 
         if(command != null) {
             command.execute(this, parts);
-            logger.info(this.name + " used /" + commandName);
+            systemLogger.info(this.name + " used /" + commandName);
         } else {
             sendMessage("Unknown command: " + commandName);
         }
@@ -170,5 +170,10 @@ public class UserImpl implements User {
     @Override
     public Role getRole() {
         return role;
+    }
+
+    @Override
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

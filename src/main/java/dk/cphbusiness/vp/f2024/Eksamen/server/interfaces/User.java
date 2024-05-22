@@ -11,5 +11,5 @@ public interface User extends Runnable {
      void init();
      void handleCommand(String text);
      Role getRole();
-
+     void setRole(Role role);
 }

@@ -12,11 +12,11 @@ import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 
-public class ServerLogger {
-    public static final Logger logger = Logger.getLogger(ChatServerImpl.class.getName());
+public class SystemLogger {
+    public static final Logger systemLogger = Logger.getLogger(ChatServerImpl.class.getName());
     private ChatServer server;
     private String logDir;
-    public ServerLogger(ChatServer server, String logDir) {
+    public SystemLogger(ChatServer server, String logDir) {
         this.server = server;
         configureLogger(logDir);
     }
@@ -40,12 +40,12 @@ public class ServerLogger {
 
             // Setup file handler
             FileHandler fileHandler = getFileHandler(logFilepath, logFormat);
-            logger.addHandler(fileHandler);
+            systemLogger.addHandler(fileHandler);
 
             // Setup console handler
             ConsoleHandler consoleHandler = new ConsoleHandler();
             consoleHandler.setFormatter(logFormat);
-            logger.addHandler(consoleHandler);
+            systemLogger.addHandler(consoleHandler);
 
         } catch (IOException e) {
             System.err.println("Failed to set up logger: " + e.getMessage());
@@ -58,7 +58,7 @@ public class ServerLogger {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         String dateStr = formatter.format(date);
 
-        String logFilePath = logDirectory + "\\" + dateStr + "-server.log";
+        String logFilePath = logDirectory + "\\" + dateStr + "-system.log";
 
         File logDir = new File(logDirectory);
         if (!logDir.exists()) {
@@ -69,6 +69,7 @@ public class ServerLogger {
         fileHandler.setFormatter(logFormat);
         return fileHandler;
     }
+
 
 
 }

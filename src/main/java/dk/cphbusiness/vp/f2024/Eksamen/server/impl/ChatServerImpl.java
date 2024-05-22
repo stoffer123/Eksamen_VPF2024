@@ -1,11 +1,9 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
-import dk.cphbusiness.vp.f2024.Eksamen.server.commands.Command;
-import dk.cphbusiness.vp.f2024.Eksamen.server.commands.HelpCommand;
-import dk.cphbusiness.vp.f2024.Eksamen.server.commands.KickCommand;
-import dk.cphbusiness.vp.f2024.Eksamen.server.commands.WhoCommand;
+import dk.cphbusiness.vp.f2024.Eksamen.server.commands.*;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.*;
-import dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger;
+import dk.cphbusiness.vp.f2024.Eksamen.server.logger.ChatLogger;
+import dk.cphbusiness.vp.f2024.Eksamen.server.logger.SystemLogger;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -14,8 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger.logger;
 
 public class ChatServerImpl implements ChatServer {
     private final int port;
@@ -26,7 +22,8 @@ public class ChatServerImpl implements ChatServer {
     private boolean isOnline;
     private final String logFilePath;
     private final Map<String, Command> commands;
-    private final ServerLogger serverLogger;
+    private final SystemLogger systemLogger;
+    private final ChatLogger chatLogger;
 
 
     public ChatServerImpl(int port, TextIO io, String logFilePath) {
@@ -37,11 +34,12 @@ public class ChatServerImpl implements ChatServer {
         isOnline = true;
         this.logFilePath = logFilePath;
         commands = new HashMap<>();
-        serverLogger = new ServerLogger(this, logFilePath);
+        systemLogger = new SystemLogger(this, logFilePath);
+        chatLogger = new ChatLogger(this, logFilePath);
         registerCommands();
 
 
-        logger.info("Server started on port " + port);
+        SystemLogger.systemLogger.info("Server started on port " + port);
 
     }
 
@@ -64,11 +62,13 @@ public class ChatServerImpl implements ChatServer {
                 users.addUser(user);
                 new Thread(user).start();
 
+                SystemLogger.systemLogger.info("NewUser joined the server!");
+
             }
 
         }catch(IOException e) {
             String errorMsg = "Error in ChatServer.startserver: " + e.getMessage();
-            logger.severe(errorMsg);
+            SystemLogger.systemLogger.severe(errorMsg);
 
         }finally {
             stopServer();
@@ -78,6 +78,8 @@ public class ChatServerImpl implements ChatServer {
 
     @Override
     public void stopServer() {
+        if(!isOnline) return; //If server is already shutting down, return.
+
         io.put("Stopping server");
         isOnline = false;
         users.clear();
@@ -90,7 +92,7 @@ public class ChatServerImpl implements ChatServer {
 
         }catch(IOException e) {
             String errorMsg = "Failed to close server socket in ChatServer.stopServer(): " + e.getMessage();
-            logger.severe(errorMsg);
+            SystemLogger.systemLogger.severe(errorMsg);
         }finally {
             System.exit(0);
         }
@@ -117,9 +119,12 @@ public class ChatServerImpl implements ChatServer {
 
     @Override
     public void registerCommands() {
-        commands.put("who", new WhoCommand(users));
         commands.put("help", new HelpCommand(commands));
+        commands.put("who", new WhoCommand(users));
         commands.put("kick", new KickCommand(users));
+        commands.put("addadmin", new AddAdminCommand(users));
+        commands.put("removeadmin", new RemoveAdminCommand(users));
+
 
     }
 

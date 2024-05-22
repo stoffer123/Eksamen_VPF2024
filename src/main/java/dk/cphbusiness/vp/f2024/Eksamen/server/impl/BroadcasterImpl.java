@@ -4,7 +4,7 @@ import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.*;
 import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 import java.util.concurrent.BlockingQueue;
 
-import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.ServerLogger.logger;
+import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.SystemLogger.systemLogger;
 
 public class BroadcasterImpl implements Broadcaster {
     private BlockingQueue<Message> messages;
@@ -30,7 +30,7 @@ public class BroadcasterImpl implements Broadcaster {
 
             } catch (InterruptedException e) {
                 String errorMsg = "Broadcaster was interrupted: " + e.getMessage();
-                logger.warning(errorMsg);
+                systemLogger.warning(errorMsg);
                 Thread.interrupted(); // clear interrupted status to continue normal operation
             }
         }
