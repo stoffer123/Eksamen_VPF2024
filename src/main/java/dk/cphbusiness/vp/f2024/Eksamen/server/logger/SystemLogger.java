@@ -14,8 +14,7 @@ import java.util.logging.Logger;
 
 public class SystemLogger {
     public static final Logger systemLogger = Logger.getLogger(ChatServerImpl.class.getName());
-    private ChatServer server;
-    private String logDir;
+    private final ChatServer server;
     public SystemLogger(ChatServer server, String logDir) {
         this.server = server;
         configureLogger(logDir);
@@ -23,7 +22,6 @@ public class SystemLogger {
 
 
     private void configureLogger(String filepath) {
-        String logFilepath = filepath;
 
         try {
             // Remove default console handler if present
@@ -39,7 +37,7 @@ public class SystemLogger {
             LogFormatter logFormat = new LogFormatter();
 
             // Setup file handler
-            FileHandler fileHandler = getFileHandler(logFilepath, logFormat);
+            FileHandler fileHandler = getFileHandler(filepath, logFormat);
             systemLogger.addHandler(fileHandler);
 
             // Setup console handler
@@ -54,17 +52,20 @@ public class SystemLogger {
     }
 
     private static FileHandler getFileHandler(String logDirectory, LogFormatter logFormat) throws IOException {
+        //Add a date to the formatter, for file naming
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         String dateStr = formatter.format(date);
 
         String logFilePath = logDirectory + "\\" + dateStr + "-system.log";
 
+        //Check if logDirectory exists, if not create one.
         File logDir = new File(logDirectory);
         if (!logDir.exists()) {
             logDir.mkdirs();
         }
 
+        //Setup the filehandler to append messages and set the formatter to LogFormatter
         FileHandler fileHandler = new FileHandler(logFilePath, true);
         fileHandler.setFormatter(logFormat);
         return fileHandler;

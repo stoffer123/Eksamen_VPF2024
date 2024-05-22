@@ -45,7 +45,7 @@ public class AddAdminCommand implements Command {
             }
         }
 
-        //If username was found close the user else say no user was found
+        //If username was found, add admin powers to the user
         if(target != null) {
             target.sendMessage("You received admin rights by: " + user.getName());
             target.setRole(Role.ADMIN);

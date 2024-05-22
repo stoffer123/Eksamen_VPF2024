@@ -4,7 +4,6 @@ import dk.cphbusiness.vp.f2024.Eksamen.server.commands.Command;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.UserList;
-import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -21,18 +20,16 @@ public class UserImpl implements User {
     private String name;
     private final DataInputStream input;
     private final DataOutputStream output;
-    private final TextIO io;
     private boolean isRunning;
     private final UserList users;
     private Role role;
 
 
-    public UserImpl(ChatServer server, User serverUser, Socket socket, TextIO io, UserList users) throws IOException {
+    public UserImpl(ChatServer server, User serverUser, Socket socket, UserList users) throws IOException {
 
         this.server = server;
         this.serverUser = serverUser;
         this.socket = socket;
-        this.io = io;
         this.name = "NewUser";
         input = new DataInputStream(socket.getInputStream());
         output = new DataOutputStream(socket.getOutputStream());
@@ -144,11 +141,11 @@ public class UserImpl implements User {
 
     @Override
     public void sendMessage(String text) {
+        //sendMessage, possibly should have had Message as parameter and convert it to String inside this method
         try {
             output.writeUTF(text);
         }catch (IOException e) {
-            String errorMsg = "sendMessage() failed for user: " + name + " with message: " + e.getMessage();
-            systemLogger.warning(errorMsg);
+            systemLogger.warning("sendMessage() failed for user: " + name + " with message: " + e.getMessage());
         }
     }
 

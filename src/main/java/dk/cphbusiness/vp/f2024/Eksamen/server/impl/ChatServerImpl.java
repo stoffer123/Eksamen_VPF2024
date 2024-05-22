@@ -22,20 +22,18 @@ public class ChatServerImpl implements ChatServer {
     private boolean isOnline;
     private final String logFilePath;
     private final Map<String, Command> commands;
-    private final SystemLogger systemLogger;
-    private final ChatLogger chatLogger;
 
 
     public ChatServerImpl(int port, TextIO io, String logFilePath) {
         this.port = port;
         this.io = io;
-        users = new UserListImpl(this, io);
+        users = new UserListImpl();
         messages = new LinkedBlockingQueue<>(100);
         isOnline = true;
         this.logFilePath = logFilePath;
         commands = new HashMap<>();
-        systemLogger = new SystemLogger(this, logFilePath);
-        chatLogger = new ChatLogger(this, logFilePath);
+        new SystemLogger(this, this.logFilePath);
+        new ChatLogger(this, this.logFilePath);
         registerCommands();
 
 
@@ -47,18 +45,19 @@ public class ChatServerImpl implements ChatServer {
     @Override
     public void startServer() {
         try {
-            //Create serverSocket, Broadcaster and serverUser
+            //Instantiate the necessary classes for the server to run
             serverSocket = new ServerSocket(port);
-            Broadcaster broadcaster = new BroadcasterImpl(messages, this, io, users);
+            Broadcaster broadcaster = new BroadcasterImpl(messages, this, users);
             new Thread(broadcaster).start();
             User serverUser = new ServerUserImpl(this, io);
             new Thread(serverUser).start();
             users.addUser(serverUser);
 
+            //Listen for new connections and handle them
             while(isOnline) {
                 Socket socket = serverSocket.accept();
                 addMessageToQueue(new MessageImpl(serverUser, "A new user has joined, waiting for name..."));
-                User user = new UserImpl(this, serverUser, socket, io, users);
+                User user = new UserImpl(this, serverUser, socket, users);
                 users.addUser(user);
                 new Thread(user).start();
 
@@ -67,8 +66,7 @@ public class ChatServerImpl implements ChatServer {
             }
 
         }catch(IOException e) {
-            String errorMsg = "Error in ChatServer.startserver: " + e.getMessage();
-            SystemLogger.systemLogger.severe(errorMsg);
+            SystemLogger.systemLogger.severe("Error in ChatServer.startserver: " + e.getMessage());
 
         }finally {
             stopServer();
@@ -91,8 +89,7 @@ public class ChatServerImpl implements ChatServer {
             }
 
         }catch(IOException e) {
-            String errorMsg = "Failed to close server socket in ChatServer.stopServer(): " + e.getMessage();
-            SystemLogger.systemLogger.severe(errorMsg);
+            SystemLogger.systemLogger.severe("Failed to close server socket in ChatServer.stopServer(): " + e.getMessage());
         }finally {
             System.exit(0);
         }

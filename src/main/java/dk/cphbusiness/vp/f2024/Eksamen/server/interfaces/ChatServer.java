@@ -1,9 +1,7 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server.interfaces;
 
 import dk.cphbusiness.vp.f2024.Eksamen.server.commands.Command;
-import dk.cphbusiness.vp.f2024.Eksamen.server.impl.MessageImpl;
 
-import java.util.List;
 
 public interface ChatServer {
     void startServer();

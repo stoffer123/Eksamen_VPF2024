@@ -1,10 +1,8 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
-import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.ChatServer;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.Message;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.User;
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.UserList;
-import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +13,8 @@ import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.SystemLogger.systemL
 
 public class UserListImpl implements UserList {
     private final List<User> users;
-    private final ChatServer server;
-    private final TextIO io;
 
-    public UserListImpl(ChatServer server, TextIO io) {
-        this.server = server;
-        this.io = io;
+    public UserListImpl() {
         users = new ArrayList<>();
     }
 
@@ -54,7 +48,6 @@ public class UserListImpl implements UserList {
             user.sendMessage(msgToSend);
         }
             chatLogger.info("[ALL] <- " + message.getComposedMessage());
-        //logger.info("ALL <- " + message.getComposedMessage()); - Replace with a chatLogger
 
     }
 

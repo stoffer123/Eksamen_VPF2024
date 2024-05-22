@@ -1,22 +1,19 @@
 package dk.cphbusiness.vp.f2024.Eksamen.server.impl;
 
 import dk.cphbusiness.vp.f2024.Eksamen.server.interfaces.*;
-import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 import java.util.concurrent.BlockingQueue;
 
 import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.SystemLogger.systemLogger;
 
 public class BroadcasterImpl implements Broadcaster {
-    private BlockingQueue<Message> messages;
-    private UserList users;
+    private final BlockingQueue<Message> messages;
+    private final UserList users;
     private final ChatServer server;
-    private final TextIO io;
 
-    public BroadcasterImpl(BlockingQueue<Message> messages, ChatServer server, TextIO io, UserList users) {
+    public BroadcasterImpl(BlockingQueue<Message> messages, ChatServer server, UserList users) {
             this.messages = messages;
             this.server = server;
             this.users = users;
-            this.io = io;
 
     }
 
@@ -29,8 +26,7 @@ public class BroadcasterImpl implements Broadcaster {
                 }
 
             } catch (InterruptedException e) {
-                String errorMsg = "Broadcaster was interrupted: " + e.getMessage();
-                systemLogger.warning(errorMsg);
+                systemLogger.warning("Broadcaster was interrupted: " + e.getMessage());
                 Thread.interrupted(); // clear interrupted status to continue normal operation
             }
         }

@@ -14,9 +14,16 @@ public class WhoCommand implements Command {
 
     @Override
     public void execute(User user, String[] args) {
+        //build a string with format [userRole] userName and seperate with new line
+
         StringBuilder response = new StringBuilder("Connected users:\n");
         for (User u : users.getUsers()) {
-            response.append("[" + u.getRole().name() + "] " + u.getName()).append("\n");
+            response.append("[")
+                    .append(u.getRole().name())
+                    .append("] ")
+                    .append(u.getName())
+                    .append("\n");
+
         }
 
         user.sendMessage(response.toString());

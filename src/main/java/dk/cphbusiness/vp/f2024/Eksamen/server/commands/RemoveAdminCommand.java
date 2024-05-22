@@ -46,7 +46,7 @@ public class RemoveAdminCommand implements Command {
             }
         }
 
-        //If username was found close the user else say no user was found
+        //If username was found, add Role.USER to target
         if(target != null) {
             if(target.getRole() == Role.SERVER) {
                 user.sendMessage("You cannot change the servers role!");

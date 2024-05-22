@@ -10,8 +10,8 @@ import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.SystemLogger.systemL
 public class ServerUserImpl implements User {
     private final ChatServer server;
     private final String name;
-    private TextIO io;
-    private Role role;
+    private final TextIO io;
+    private final Role role;
 
 
     public ServerUserImpl(ChatServer server, TextIO io) {
@@ -62,7 +62,7 @@ public class ServerUserImpl implements User {
     }
 
     @Override
-    public void handleCommand(String text) {
+    public void handleCommand(String text) { //could be default message in interface???
         String[] parts = text.split(" ");
         String commandName = parts[0].substring(1);
         Command command = server.getCommand(commandName);

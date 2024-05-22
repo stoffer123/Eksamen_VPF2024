@@ -33,7 +33,7 @@ public class ClientImpl implements Client {
 
     @Override
     public void run() {
-        new Thread(new TxtListener(this, socket, input, io)).start();
+        new Thread(new TxtListener(this, input, io)).start();
         while(isRunning) {
             String message = io.get();
             if(message.equalsIgnoreCase("/exit")) {
