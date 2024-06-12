@@ -13,11 +13,9 @@ import java.net.Socket;
 import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.SystemLogger.systemLogger;
 
 
-public class UserImpl implements User {
-    private final ChatServer server;
+public class UserImpl extends AbstractUser {
     private final User serverUser;
     private final Socket socket;
-    private String name;
     private final DataInputStream input;
     private final DataOutputStream output;
     private boolean isRunning;
@@ -26,11 +24,9 @@ public class UserImpl implements User {
 
 
     public UserImpl(ChatServer server, User serverUser, Socket socket, UserList users) throws IOException {
-
-        this.server = server;
+        super(server, "NewUser");
         this.serverUser = serverUser;
         this.socket = socket;
-        this.name = "NewUser";
         input = new DataInputStream(socket.getInputStream());
         output = new DataOutputStream(socket.getOutputStream());
         isRunning = true;
@@ -149,7 +145,7 @@ public class UserImpl implements User {
         }
     }
 
-    @Override
+/*    @Override
     public void handleCommand(String text) {
         String[] parts = text.split(" ");
         String commandName = parts[0].substring(1);
@@ -162,7 +158,7 @@ public class UserImpl implements User {
             sendMessage("Unknown command: " + commandName);
         }
 
-    }
+    } */
 
     @Override
     public Role getRole() {

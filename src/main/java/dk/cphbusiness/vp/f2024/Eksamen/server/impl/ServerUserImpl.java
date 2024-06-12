@@ -7,16 +7,13 @@ import dk.cphbusiness.vp.f2024.Eksamen.textio.TextIO;
 
 import static dk.cphbusiness.vp.f2024.Eksamen.server.logger.SystemLogger.systemLogger;
 
-public class ServerUserImpl implements User {
-    private final ChatServer server;
-    private final String name;
+public class ServerUserImpl extends AbstractUser {
     private final TextIO io;
     private final Role role;
 
 
     public ServerUserImpl(ChatServer server, TextIO io) {
-        this.server = server;
-        this.name = "SERVER";
+        super(server, "SERVER");
         this.io = io;
         role = Role.SERVER;
     }
@@ -61,7 +58,7 @@ public class ServerUserImpl implements User {
         //not needed in serverUser
     }
 
-    @Override
+/*    @Override
     public void handleCommand(String text) { //could be default message in interface???
         String[] parts = text.split(" ");
         String commandName = parts[0].substring(1);
@@ -74,7 +71,7 @@ public class ServerUserImpl implements User {
             sendMessage("Unknown command: " + commandName);
         }
     }
-
+*/
 
     @Override
     public Role getRole() {
